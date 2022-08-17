@@ -1,0 +1,7 @@
+name = "PyPlotHelper"
+uuid = "aceea9a9-7dae-4405-8a3b-db2209ebed9b"
+authors = ["Frederick Groth <fgroth@usm.lmu.de>"]
+version = "0.1.0"
+
+[deps]
+PyPlot = "d330b81b-6aea-500a-939a-2ce795aea3ee"
