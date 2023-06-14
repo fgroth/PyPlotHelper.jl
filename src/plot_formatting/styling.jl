@@ -42,3 +42,35 @@ function style_plot(; print_columns::Number=1, n_plots_side_by_side::Number=1.0,
     # legend
     rc("legend", frameon = false, handletextpad = 0.4)
 end
+
+"""
+    set_dark_mode(; unset::Bool=false)
+
+Set dark mode colors. 
+Set lightmode again for `unset==true`.
+"""
+function set_dark_mode(; unset::Bool=false)
+    fg=if unset
+        "black"
+    else
+        "white"
+    end
+    bg=if unset
+        "white"
+    else
+        "black"
+    end
+    rc("patch",facecolor=bg,
+       edgecolor=fg)
+    rc("axes",facecolor=bg,
+       edgecolor=fg,labelcolor=fg,titlecolor=fg)
+    rc("figure",facecolor=bg,
+       edgecolor=fg)
+    rc("legend",facecolor=bg,
+       edgecolor=fg) #,labelcolor=fg)
+    rc("savefig",facecolor=bg,
+       edgecolor=fg)
+    rc("text",color=fg)
+    rc("xtick",color=fg)#,labelcolor=fg)
+    rc("ytick",color=fg)#,labelcolor=fg)
+end
