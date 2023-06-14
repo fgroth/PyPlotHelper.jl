@@ -18,7 +18,7 @@ end
 returns a colormap typically used for the quantity
 """
 function get_colormap(quantity::String="rho")
-    if quantity in ["rho", "density", "gas_density"]
+    if lowercase(quantity) in ["rho", "density", "gas_density"]
         return "plasma"
     else
         error("quantity value not allowed")
