@@ -1,7 +1,7 @@
 using PyPlot
 
 """
-    plot_styling(fontsize::Float64=1)
+    plot_styling(; print_columns::Number=1,n_plots_side_by_side::Number=1.0,print_width::Number=-1.0,fig_width::Number=4.0,mode::String="publication")
 
 do some default plot styling
 """
