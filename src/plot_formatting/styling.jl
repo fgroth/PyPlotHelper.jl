@@ -43,6 +43,7 @@ function style_plot(; print_columns::Number=1, n_plots_side_by_side::Number=1.0,
     rc("legend", frameon = false, handletextpad = 0.4)
 end
 
+global dark_mode_active=false
 """
     set_dark_mode(; unset::Bool=false)
 
@@ -50,6 +51,11 @@ Set dark mode colors.
 Set lightmode again for `unset==true`.
 """
 function set_dark_mode(; unset::Bool=false)
+    if unset
+        global dark_mode_active=false
+    else
+        global dark_mode_active=true
+    end
     fg=if unset
         "black"
     else
