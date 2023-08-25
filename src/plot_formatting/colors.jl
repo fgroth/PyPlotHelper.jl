@@ -6,8 +6,12 @@ using PyPlot
 returns a color at position i of commonly used color cycle.
 """
 function get_color(i::Int64=1)
-    color_cycle = ["red", "green", "turquoise", "blue", "purple", "magenta", "black", "gray"]
-
+    if dark_mode_active
+        color_cycle = ["red", "green", "turquoise", "blue", "purple", "magenta", "white", "gray"]
+    else
+        color_cycle = ["red", "green", "turquoise", "blue", "purple", "magenta", "black", "gray"]
+    end
+    
     return color_cycle[mod(i-1,length(color_cycle))+1] # repeat for numbers outside length
 end
 
