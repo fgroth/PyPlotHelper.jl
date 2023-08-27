@@ -28,3 +28,16 @@ function get_colormap(quantity::String="rho")
         error("quantity value not allowed")
     end
 end
+
+"""
+    main_color()
+
+return white for dark-mode, black for light-mode.
+"""
+function main_color()
+    if dark_mode_active
+        return "white"
+    else
+        return "black"
+    end
+end
