@@ -9,6 +9,6 @@ include(joinpath("plot_formatting","styling.jl"))
 export get_color, get_colormap,
     get_linestyle, get_marker,
     style_plot,
-    set_dark_mode
+    set_dark_mode, main_color
 
 end # module
