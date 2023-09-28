@@ -17,7 +17,7 @@ end
 
 
 """
-    get_colorbar(quantity::String="rho")
+    get_colormap(quantity::String="rho")
 
 returns a colormap typically used for the quantity
 """
