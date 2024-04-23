@@ -24,6 +24,8 @@ returns a colormap typically used for the quantity
 function get_colormap(quantity::String="rho")
     if lowercase(quantity) in ["rho", "density", "gas_density"]
         return "plasma"
+    elseif lowercase(quantity) in ["t(u)","t","temp"]
+        return "inferno"
     else
         error("quantity value not allowed")
     end
