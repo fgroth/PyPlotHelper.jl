@@ -1,5 +1,14 @@
 using PyPlot
 
+struct PanelPlot
+    print_columns::Number
+    plot_combined_columns::Bool
+    plot_combined_rows::Bool
+    function PanelPlot(; print_columns::Number=1, plot_combined_columns::Bool=true, plot_combined_rows::Bool=true)
+        new(print_columns,plot_combined_columns,plot_combined_rows)
+    end
+end
+
 function setup_maps_plot(; n_to_plot::Int64=2, print_columns::Int64=2)
     fig = figure(figsize=(4*n_to_plot,4))
     style_plot(fig_width=4*n_to_plot,print_columns=print_columns)
@@ -19,4 +28,8 @@ function setup_panel_comparison_plot(; print_columns::Int64=1)
     ax = gs.subplots()
 
     return fig, ax
+end
+
+function setup_plot(plot_type::PanelPlot)
+    setup_panel_comparison_plot(print_columns=plot_type.print_columns)
 end
