@@ -4,8 +4,22 @@ struct PanelPlot
     print_columns::Number
     plot_combined_columns::Bool
     plot_combined_rows::Bool
-    function PanelPlot(; print_columns::Number=1, plot_combined_columns::Bool=true, plot_combined_rows::Bool=true)
-        new(print_columns,plot_combined_columns,plot_combined_rows)
+    xscale::String
+    yscale::String
+    xlim::Vector
+    ylim::Vector
+    xlabel::String
+    ylabel::String
+    row_names::Vector{String}
+    column_names::Vector{String}
+    function PanelPlot(; print_columns::Number=1, plot_combined_columns::Bool=true, plot_combined_rows::Bool=true,
+                       xscale::String="log", yscale::String="linear",xlim::Vector=[1e-2,1e0],ylim::Vector=[0,1],
+                       xlabel::String="",ylabel::String="",
+                       row_names::Vector{String}=["MFM","SPH"], column_names::Vector{String}=["relaxed","active"])
+        new(print_columns,plot_combined_columns,plot_combined_rows,
+            xscale,yscale,xlim,ylim,
+            xlabel,ylabel,
+            row_names, column_names)
     end
 end
 
@@ -26,11 +40,16 @@ function setup_plot(plot_type::MapsPlot)
     style_plot(fig_width=4*plot_type.n_to_plot,print_columns=plot_type.print_columns)
     gs = fig.add_gridspec(1,plot_type.n_to_plot, hspace=0.01, wspace=0.01, left=0.01,right=0.99,top=0.99,bottom=0.01)
     ax = gs.subplots()
-    if plot_type.n_to_plot == 1
-        return fig, [ax]
+    ax = if plot_type.n_to_plot == 1
+        [ax]
     else
-        return fig, ax
+        ax
     end
+    for this_ax in ax
+        this_ax.set_xticks([])
+        this_ax.set_yticks([])
+    end
+    return fig,ax
 end
 
 function setup_panel_comparison_plot(; print_columns::Int64=1)
@@ -43,5 +62,49 @@ function setup_plot(plot_type::PanelPlot)
     gs = fig.add_gridspec(3,3, left=0.1,right=0.99, bottom=0.1, top=0.99,hspace=0.01, wspace=0.01)
     ax = gs.subplots()
 
+    for this_ax in ax
+        this_ax.set_xscale(plot_type.xscale)
+        this_ax.set_yscale(plot_type.yscale)
+        this_ax.set_xlim(plot_type.xlim)
+        this_ax.set_ylim(plot_type.ylim)
+    end
+
+    # MFM relaxed
+    ax[2,1].set_ylabel(plot_type.ylabel)
+    ax[2,1].set_xticklabels([])
+    # MFM active
+    ax[2,2].set_yticklabels([])
+    ax[2,2].set_xticklabels([])
+    # SPH relaxed
+    ax[3,1].set_xlabel(plot_type.xlabel)
+    ax[3,1].set_ylabel(plot_type.ylabel)
+    # SPH active
+    ax[3,2].set_xlabel(plot_type.xlabel)
+    ax[3,2].set_yticklabels([])
+    # MFM
+    x_text=1.1*minimum(plot_type.xlim)
+    y_text = if plot_type.yscale == "log"
+        exp(0.5*log(maximum(plot_type.ylim)*minimum(plot_type.ylim)))
+    else # linear
+        0.5*(maximum(plot_type.ylim)+minimum(plot_type.ylim))
+    end
+    ax[2,3].text(x_text,y_text,plot_type.row_names[1])
+    ax[2,3].set_yticklabels([])
+    ax[2,3].set_xticklabels([])
+    # SPH
+    ax[3,3].text(x_text,y_text,plot_type.row_names[2])
+    ax[3,3].set_xlabel(plot_type.xlabel)
+    ax[3,3].set_yticklabels([])
+    # relaxed
+    ax[1,1].text(x_text,y_text,plot_type.column_names[1])
+    ax[1,1].set_ylabel(plot_type.ylabel)
+    ax[1,1].set_xticklabels([])
+    # active
+    ax[1,2].text(x_text,y_text,plot_type.column_names[2])
+    ax[1,2].set_yticklabels([])
+    ax[1,2].set_xticklabels([])
+    
+    ax[1,3].remove()
+    
     return fig, ax
 end
