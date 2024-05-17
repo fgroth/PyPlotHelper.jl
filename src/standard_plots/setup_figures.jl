@@ -59,7 +59,17 @@ end
 function setup_plot(plot_type::PanelPlot)
     fig = figure(figsize=(12,12))
     style_plot(fig_width=12, print_columns=plot_type.print_columns)
-    gs = fig.add_gridspec(3,3, left=0.1,right=0.99, bottom=0.1, top=0.99,hspace=0.01, wspace=0.01)
+    n_rows = if plot_type.plot_combined_columns
+        3
+    else
+        2
+    end
+    n_columns = if plot_type.plot_combined_rows
+        3
+    else
+        2
+    end
+    gs = fig.add_gridspec(n_rows,n_columns, left=0.1,right=0.99, bottom=0.1, top=0.99,hspace=0.01, wspace=0.01)
     ax = gs.subplots()
 
     for this_ax in ax
@@ -69,42 +79,41 @@ function setup_plot(plot_type::PanelPlot)
         this_ax.set_ylim(plot_type.ylim)
     end
 
-    # MFM relaxed
-    ax[2,1].set_ylabel(plot_type.ylabel)
-    ax[2,1].set_xticklabels([])
-    # MFM active
-    ax[2,2].set_yticklabels([])
-    ax[2,2].set_xticklabels([])
-    # SPH relaxed
-    ax[3,1].set_xlabel(plot_type.xlabel)
-    ax[3,1].set_ylabel(plot_type.ylabel)
-    # SPH active
-    ax[3,2].set_xlabel(plot_type.xlabel)
-    ax[3,2].set_yticklabels([])
-    # MFM
+    for i_row in 1:n_rows
+        for i_column in 1:n_columns
+            if i_column == 1
+                ax[i_row,i_column].set_ylabel(plot_type.ylabel)
+            else
+                ax[i_row,i_column].set_yticklabels([])
+            end
+            if i_row == n_rows
+                ax[i_row,i_column].set_xlabel(plot_type.xlabel)
+            else
+                ax[i_row,i_column].set_xticklabels([])
+            end
+        end
+    end
+
+    # text
     x_text=1.1*minimum(plot_type.xlim)
     y_text = if plot_type.yscale == "log"
         exp(0.5*log(maximum(plot_type.ylim)*minimum(plot_type.ylim)))
     else # linear
         0.5*(maximum(plot_type.ylim)+minimum(plot_type.ylim))
     end
-    ax[2,3].text(x_text,y_text,plot_type.row_names[1])
-    ax[2,3].set_yticklabels([])
-    ax[2,3].set_xticklabels([])
-    # SPH
-    ax[3,3].text(x_text,y_text,plot_type.row_names[2])
-    ax[3,3].set_xlabel(plot_type.xlabel)
-    ax[3,3].set_yticklabels([])
-    # relaxed
+    offset = if !plot_type.plot_combined_rows & !plot_type.plot_combined_columns
+        ax[n_rows-1,n_columns].text(x_text,y_text,plot_type.row_names[1]*" "*plot_type.column_names[2])
+    else
+        ax[n_rows-1,n_columns].text(x_text,y_text,plot_type.row_names[1])
+        ax[1,2].text(x_text,y_text,plot_type.column_names[2])
+    end
+    ax[n_rows,n_columns].text(x_text,y_text,plot_type.row_names[2])
     ax[1,1].text(x_text,y_text,plot_type.column_names[1])
-    ax[1,1].set_ylabel(plot_type.ylabel)
-    ax[1,1].set_xticklabels([])
-    # active
-    ax[1,2].text(x_text,y_text,plot_type.column_names[2])
-    ax[1,2].set_yticklabels([])
-    ax[1,2].set_xticklabels([])
     
-    ax[1,3].remove()
+    
+    if plot_type.plot_combined_rows & plot_type.plot_combined_columns
+        ax[1,3].remove()
+    end
     
     return fig, ax
 end
