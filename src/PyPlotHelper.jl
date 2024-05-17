@@ -13,7 +13,7 @@ export get_color, get_colormap,
 
 include(joinpath("standard_plots","setup_figures.jl"))
 export setup_maps_plot, setup_panel_comparison_plot,
-    PanelPlot,
+    MapsPlot,PanelPlot,
     setup_plot
 
 end # module
