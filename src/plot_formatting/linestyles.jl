@@ -49,3 +49,18 @@ function get_filled_marker(i::Int64=1)
                            "d"] # thin diamond
     return filled_marker_cycle[mod(i-1,length(filled_marker_cycle))+1]
 end
+
+"""
+    get_fillstyle(i::Int64=1)
+
+Return the marker fillstyle at index i for the commonly used fillstyle cycle.
+"""
+function get_fillstyle(i::Int64=1)
+    fillstyle_cycle = ["none",
+                       "full",
+                       "top",
+                       "bottom",
+                       "right",
+                       "left"]
+    return fillstyle_cycle[mod(i-1,length(fillstyle_cycle))+1]
+end
