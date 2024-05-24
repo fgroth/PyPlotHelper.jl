@@ -8,13 +8,13 @@ struct PanelPlot
     yscale::String
     xlim::Vector
     ylim::Vector
-    xlabel::String
-    ylabel::String
+    xlabel::AbstractString
+    ylabel::AbstractString
     row_names::Vector{String}
     column_names::Vector{String}
     function PanelPlot(; print_columns::Number=1, plot_combined_columns::Bool=true, plot_combined_rows::Bool=true,
                        xscale::String="log", yscale::String="linear",xlim::Vector=[1e-2,1e0],ylim::Vector=[0,1],
-                       xlabel::String="",ylabel::String="",
+                       xlabel::AbstractString="",ylabel::AbstractString="",
                        row_names::Vector{String}=["MFM","SPH"], column_names::Vector{String}=["relaxed","active"])
         new(print_columns,plot_combined_columns,plot_combined_rows,
             xscale,yscale,xlim,ylim,
