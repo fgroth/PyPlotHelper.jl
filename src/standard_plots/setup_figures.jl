@@ -61,14 +61,14 @@ end
 
 function setup_plot(plot_type::PanelPlot)
     n_rows = if plot_type.plot_combined_columns
-        3
+        length(plot_type.row_names) + 1
     else
-        2
+        length(plot_type.row_names)
     end
     n_columns = if plot_type.plot_combined_rows
-        3
+        length(plot_type.column_names) + 1
     else
-        2
+        length(plot_type.column_names)
     end
     fig = figure(figsize=(4*n_columns,4*n_rows))
     style_plot(fig_width=4*n_columns, print_columns=plot_type.print_columns)
@@ -118,17 +118,20 @@ function setup_plot(plot_type::PanelPlot)
         0.98, "top"
     end
     if !plot_type.plot_combined_rows & !plot_type.plot_combined_columns
-        ax[n_rows-1,n_columns].text(x_text,y_text,plot_type.row_names[1]*" "*plot_type.column_names[2], transform=ax[n_rows-1,n_columns].transAxes, horizontalalignment=horizontalalignment, verticalalignment=verticalalignment)
+        ax[1,n_columns].text(x_text,y_text,plot_type.row_names[1]*" "*plot_type.column_names[2], transform=ax[n_rows-1,n_columns].transAxes, horizontalalignment=horizontalalignment, verticalalignment=verticalalignment)
     else
-        ax[n_rows-1,n_columns].text(x_text,y_text,plot_type.row_names[1], transform=ax[n_rows-1,n_columns].transAxes, horizontalalignment=horizontalalignment, verticalalignment=verticalalignment)
-        ax[1,2].text(x_text,y_text,plot_type.column_names[2], transform=ax[1,2].transAxes, horizontalalignment=horizontalalignment, verticalalignment=verticalalignment)
+        ax[1+n_rows-length(plot_type.row_names),n_columns].text(x_text,y_text,plot_type.row_names[1], transform=ax[2,n_columns].transAxes, horizontalalignment=horizontalalignment, verticalalignment=verticalalignment)
+        ax[1,length(plot_type.column_names)].text(x_text,y_text,plot_type.column_names[end], transform=ax[1,length(plot_type.column_names)].transAxes, horizontalalignment=horizontalalignment, verticalalignment=verticalalignment)
     end
-    ax[n_rows,n_columns].text(x_text,y_text,plot_type.row_names[2], transform=ax[n_rows,n_columns].transAxes, horizontalalignment=horizontalalignment, verticalalignment=verticalalignment)
-    ax[1,1].text(x_text,y_text,plot_type.column_names[1], transform=ax[1,1].transAxes, horizontalalignment=horizontalalignment, verticalalignment=verticalalignment)
-    
+    for i_row in 2:length(plot_type.row_names)
+        ax[i_row+n_rows-length(plot_type.row_names),n_columns].text(x_text,y_text,plot_type.row_names[i_row], transform=ax[i_row+n_rows-length(plot_type.row_names),n_columns].transAxes, horizontalalignment=horizontalalignment, verticalalignment=verticalalignment)
+    end
+    for i_column in length(plot_type.column_names)-1:-1:1
+        ax[1,i_column].text(x_text,y_text,plot_type.column_names[i_column], transform=ax[1,i_column].transAxes, horizontalalignment=horizontalalignment, verticalalignment=verticalalignment)
+    end
     
     if plot_type.plot_combined_rows & plot_type.plot_combined_columns
-        ax[1,3].remove()
+        ax[1,n_columns].remove()
     end
     
     return fig, ax
