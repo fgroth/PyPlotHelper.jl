@@ -12,14 +12,17 @@ struct PanelPlot
     ylabel::AbstractString
     row_names::Vector{String}
     column_names::Vector{String}
+    names_position::String
     function PanelPlot(; print_columns::Number=1, plot_combined_columns::Bool=true, plot_combined_rows::Bool=true,
                        xscale::String="log", yscale::String="linear",xlim::Vector=[1e-2,1e0],ylim::Vector=[0,1],
                        xlabel::AbstractString="",ylabel::AbstractString="",
-                       row_names::Vector{String}=["MFM","SPH"], column_names::Vector{String}=["relaxed","active"])
+                       row_names::Vector{String}=["MFM","SPH"], column_names::Vector{String}=["relaxed","active"],
+                       names_position::String="center left")
         new(print_columns,plot_combined_columns,plot_combined_rows,
             xscale,yscale,xlim,ylim,
             xlabel,ylabel,
-            row_names, column_names)
+            row_names, column_names,
+            names_position)
     end
 end
 
@@ -94,21 +97,17 @@ function setup_plot(plot_type::PanelPlot)
         end
     end
 
-    # text
-    x_text=1.1*minimum(plot_type.xlim)
-    y_text = if plot_type.yscale == "log"
-        exp(0.5*log(maximum(plot_type.ylim)*minimum(plot_type.ylim)))
-    else # linear
-        0.5*(maximum(plot_type.ylim)+minimum(plot_type.ylim))
-    end
-    offset = if !plot_type.plot_combined_rows & !plot_type.plot_combined_columns
-        ax[n_rows-1,n_columns].text(x_text,y_text,plot_type.row_names[1]*" "*plot_type.column_names[2])
+    # panel labels
+    x_text=0.02 # positions in axes units
+    y_text = 0.5
+    if !plot_type.plot_combined_rows & !plot_type.plot_combined_columns
+        ax[n_rows-1,n_columns].text(x_text,y_text,plot_type.row_names[1]*" "*plot_type.column_names[2], transform=ax[n_rows-1,n_columns].transAxes)
     else
-        ax[n_rows-1,n_columns].text(x_text,y_text,plot_type.row_names[1])
-        ax[1,2].text(x_text,y_text,plot_type.column_names[2])
+        ax[n_rows-1,n_columns].text(x_text,y_text,plot_type.row_names[1], transform=ax[n_rows-1,n_columns].transAxes)
+        ax[1,2].text(x_text,y_text,plot_type.column_names[2], transform=ax[1,2].transAxes)
     end
-    ax[n_rows,n_columns].text(x_text,y_text,plot_type.row_names[2])
-    ax[1,1].text(x_text,y_text,plot_type.column_names[1])
+    ax[n_rows,n_columns].text(x_text,y_text,plot_type.row_names[2], transform=ax[n_rows,n_columns].transAxes)
+    ax[1,1].text(x_text,y_text,plot_type.column_names[1], transform=ax[1,1].transAxes)
     
     
     if plot_type.plot_combined_rows & plot_type.plot_combined_columns
