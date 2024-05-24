@@ -60,8 +60,6 @@ function setup_panel_comparison_plot(; print_columns::Int64=1)
 end
 
 function setup_plot(plot_type::PanelPlot)
-    fig = figure(figsize=(12,12))
-    style_plot(fig_width=12, print_columns=plot_type.print_columns)
     n_rows = if plot_type.plot_combined_columns
         3
     else
@@ -72,6 +70,8 @@ function setup_plot(plot_type::PanelPlot)
     else
         2
     end
+    fig = figure(figsize=(4*n_columns,4*n_rows))
+    style_plot(fig_width=4*n_columns, print_columns=plot_type.print_columns)
     gs = fig.add_gridspec(n_rows,n_columns, left=0.1,right=0.99, bottom=0.1, top=0.99,hspace=0.01, wspace=0.01)
     ax = gs.subplots()
 
