@@ -74,6 +74,10 @@ function setup_plot(plot_type::PanelPlot)
     style_plot(fig_width=4*n_columns, print_columns=plot_type.print_columns)
     gs = fig.add_gridspec(n_rows,n_columns, left=0.1,right=0.99, bottom=0.1, top=0.99,hspace=0.01, wspace=0.01)
     ax = gs.subplots()
+    if n_rows*n_columns == 1
+        ax = [ax]
+    end
+    ax = reshape(ax, (n_rows,n_columns))
 
     for this_ax in ax
         this_ax.set_xscale(plot_type.xscale)
@@ -118,9 +122,9 @@ function setup_plot(plot_type::PanelPlot)
         0.98, "top"
     end
     if !plot_type.plot_combined_rows & !plot_type.plot_combined_columns
-        ax[1,n_columns].text(x_text,y_text,plot_type.row_names[1]*" "*plot_type.column_names[2], transform=ax[n_rows-1,n_columns].transAxes, horizontalalignment=horizontalalignment, verticalalignment=verticalalignment)
+        ax[1,n_columns].text(x_text,y_text,plot_type.row_names[1]*" "*plot_type.column_names[length(plot_type.column_names)], transform=ax[1,n_columns].transAxes, horizontalalignment=horizontalalignment, verticalalignment=verticalalignment)
     else
-        ax[1+n_rows-length(plot_type.row_names),n_columns].text(x_text,y_text,plot_type.row_names[1], transform=ax[2,n_columns].transAxes, horizontalalignment=horizontalalignment, verticalalignment=verticalalignment)
+        ax[1+n_rows-length(plot_type.row_names),n_columns].text(x_text,y_text,plot_type.row_names[1], transform=ax[1+n_rows-length(plot_type.row_names),n_columns].transAxes, horizontalalignment=horizontalalignment, verticalalignment=verticalalignment)
         ax[1,length(plot_type.column_names)].text(x_text,y_text,plot_type.column_names[end], transform=ax[1,length(plot_type.column_names)].transAxes, horizontalalignment=horizontalalignment, verticalalignment=verticalalignment)
     end
     for i_row in 2:length(plot_type.row_names)
