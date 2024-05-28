@@ -142,3 +142,7 @@ function setup_plot(plot_type::PanelPlot)
     
     return fig, ax
 end
+
+function add_legend(plot_type::PanelPlot, ax, lines::Vector, names::Vector)
+    ax[1,2].legend(lines, names, bbox_to_anchor=(1.04,0), loc="lower left")
+end
