@@ -1,6 +1,8 @@
 using PyPlot
 
-struct PanelPlot
+abstract type PlotType end
+
+struct PanelPlot <: PlotType
     print_columns::Number
     plot_combined_columns::Bool
     plot_combined_rows::Bool
@@ -26,7 +28,7 @@ struct PanelPlot
     end
 end
 
-struct MapsPlot
+struct MapsPlot <: PlotType
     print_columns::Number
     n_to_plot::Int64
     function MapsPlot(; print_columns::Number=2, n_to_plot::Int64=2)
