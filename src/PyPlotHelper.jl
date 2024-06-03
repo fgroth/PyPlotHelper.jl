@@ -12,9 +12,12 @@ export get_color, get_colormap,
     style_plot,
     set_dark_mode, main_color
 
-include(joinpath("standard_plots","setup_figures.jl"))
-export setup_maps_plot, setup_panel_comparison_plot,
-    PlotType,MapsPlot,PanelPlot,
-    setup_plot, add_legend
+include(joinpath("standard_plots","general.jl"))
+export PlotType
+include(joinpath("standard_plots","maps_plot.jl"))
+export MapsPlot, setup_maps_plot
+include(joinpath("standard_plots","panel_plot.jl"))
+export PanelPlot, setup_panel_comparison_plot
+export setup_plot, add_legend
 
 end # module
