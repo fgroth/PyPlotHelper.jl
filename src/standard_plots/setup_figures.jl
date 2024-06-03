@@ -15,16 +15,19 @@ struct PanelPlot <: PlotType
     row_names::Vector{String}
     column_names::Vector{String}
     names_position::String
+    no_legend::Bool
     function PanelPlot(; print_columns::Number=1, plot_combined_columns::Bool=true, plot_combined_rows::Bool=true,
                        xscale::String="log", yscale::String="linear",xlim::Vector=[1e-2,1e0],ylim::Vector=[0,1],
                        xlabel::AbstractString="",ylabel::AbstractString="",
                        row_names::Vector{String}=["MFM","SPH"], column_names::Vector{String}=["relaxed","active"],
-                       names_position::String="center left")
+                       names_position::String="center left",
+                       no_legend::Bool=false)
         new(print_columns,plot_combined_columns,plot_combined_rows,
             xscale,yscale,xlim,ylim,
             xlabel,ylabel,
             row_names, column_names,
-            names_position)
+            names_position,
+            no_legend)
     end
 end
 
@@ -72,9 +75,18 @@ function setup_plot(plot_type::PanelPlot)
     else
         length(plot_type.column_names)
     end
-    fig = figure(figsize=(4*n_columns,4*n_rows))
+    legend_space = if (plot_type.plot_combined_columns && plot_type.plot_combined_rows) || plot_type.no_legend
+        0
+    elseif n_columns >= 4
+        1
+    elseif n_columns >= 2
+        2
+    else
+        4
+    end
+    fig = figure(figsize=(4*n_columns,4*n_rows+legend_space))
     style_plot(fig_width=4*n_columns, print_columns=plot_type.print_columns)
-    gs = fig.add_gridspec(n_rows,n_columns, left=0.1,right=0.99, bottom=0.1, top=0.99,hspace=0.01, wspace=0.01)
+    gs = fig.add_gridspec(n_rows,n_columns, left=0.1,right=0.99, bottom=0.1, top=minimum([0.99,1-legend_space/(4*n_rows)]),hspace=0.01, wspace=0.01)
     ax = gs.subplots()
     if n_rows*n_columns == 1
         ax = [ax]
@@ -144,5 +156,18 @@ function setup_plot(plot_type::PanelPlot)
 end
 
 function add_legend(plot_type::PanelPlot, ax, lines::Vector, names::Vector)
-    ax[1,2].legend(lines, names, bbox_to_anchor=(1.04,0), loc="lower left")
+    n_columns = if plot_type.plot_combined_rows
+        length(plot_type.column_names) + 1
+    else
+        length(plot_type.column_names)
+    end
+    if (plot_type.plot_combined_columns && plot_type.plot_combined_rows)
+        ax[1,length(plot_type.column_names)].legend(lines, names, bbox_to_anchor=(1.04,0), loc="lower left", ncol=1)
+    elseif n_columns >= 4
+        ax[end-length(plot_type.row_names)+1,1].legend(lines, names, bbox_to_anchor=(0,1.04), loc="lower left", ncol=4)
+    elseif n_columns >= 2
+        ax[end-length(plot_type.row_names)+1,1].legend(lines, names, bbox_to_anchor=(0,1.04), loc="lower left", ncol=2)
+    else
+        ax[end-length(plot_type.row_names)+1,1].legend(lines, names, bbox_to_anchor=(0,1.04), loc="lower left", ncol=1)
+    end    
 end
