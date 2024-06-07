@@ -33,7 +33,7 @@ function style_plot(; print_columns::Number=1, n_plots_side_by_side::Number=1.0,
     rc("font", size = axis_label_font_size, family = "stixgeneral")
     rc("mathtext", fontset = "stix")
     rc("legend", fontsize = legend_font_size)
-    rc("axes", labelsize = axis_label_font_size, titlesize = title_font_size)
+    rc("axes", labelsize = axis_label_font_size, titlesize = title_font_size, labelpad=axis_label_font_size/5)
     
     # axes: ticks
     rc("xtick", direction = "in", top = true)
@@ -79,4 +79,14 @@ function set_dark_mode(; unset::Bool=false)
     rc("text",color=fg)
     rc("xtick",color=fg)#,labelcolor=fg)
     rc("ytick",color=fg)#,labelcolor=fg)
+end
+
+"""
+    get_bottom(; height::Number=4)
+
+Get value for `bottom` to have enough space for axis labels.
+"""
+function get_bottom(; height::Number=4)
+    # use the font size as reference
+    return 0.15 / height * matplotlib.rcParams["font.size"]/5
 end
