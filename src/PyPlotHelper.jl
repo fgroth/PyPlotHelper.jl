@@ -18,6 +18,8 @@ include(joinpath("standard_plots","maps_plot.jl"))
 export MapsPlot, setup_maps_plot
 include(joinpath("standard_plots","panel_plot.jl"))
 export PanelPlot, setup_panel_comparison_plot
+include(joinpath("standard_plots","profile_plot.jl"))
+export ProfilePlot, setup_profile_plot
 export setup_plot, add_legend
 
 end # module
