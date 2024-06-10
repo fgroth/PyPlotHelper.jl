@@ -90,3 +90,30 @@ function get_bottom(; height::Number=4)
     # use the font size as reference
     return 0.15 / height * matplotlib.rcParams["font.size"]/5
 end
+"""
+    get_bottom(height::Number=4)
+
+Get value for `bottom` to have enough space for axis labels.
+"""
+function get_bottom(height::Number=4)
+    return get_bottom(height=height)
+end
+
+"""
+    get_left(; width::Number=4)
+
+Get value for `left` to have enough space for axis labels.
+"""
+function get_left(; width::Number=4)
+    # use the font size as reference
+    return 0.2 / width * matplotlib.rcParams["font.size"]/5
+end
+"""
+    get_left(width::Number=4)
+
+Get value for `left` to have enough space for axis labels.
+"""
+function get_left(width::Number=4)
+    # use the font size as reference
+    return get_left(width=width)
+end
