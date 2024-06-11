@@ -47,7 +47,11 @@ function setup_plot(plot_type::ProfilePlot)
     for i_ax in 1:plot_type.n_profiles
         ax[i_ax].set_xlabel(plot_type.xlabel)
         ax[i_ax].set_xscale(plot_type.xscale)
-        ax[i_ax].set_xlim(plot_type.xlim)
+        if typeof(plot_type.xlim) <: Nothing
+            ax[i_ax].set_xlim(auto=true)
+        else
+            ax[i_ax].set_xlim(plot_type.xlim)
+        end
     end
     # setup yaxis: label
     for i_label in 1:minimum([length(ylabel),plot_type.n_profiles])
@@ -64,7 +68,7 @@ function setup_plot(plot_type::ProfilePlot)
     # setup yaxis: limits
     for i_ax in 1:plot_type.n_profiles
         if typeof(plot_type.ylim) <: Nothing
-            ax[i_ax].set_ylim(plot_type.ylim)
+            ax[i_ax].set_ylim(auto=true)
         elseif typeof(plot_type.ylim[1]) <: Number
                 ax[i_ax].set_ylim(plot_type.ylim)
         else # Vector of Vector
@@ -93,6 +97,6 @@ function add_legend(plot_type::ProfilePlot, ax, lines::Vector, names::Vector)
             ax[mod(i_legend-1,plot_type.n_profiles)+1].legend(lines[i_legend],names[i_legend])
         end
     else
-        ax[1].legend(lines, methods)
+        ax[1].legend(lines, names)
     end
 end
