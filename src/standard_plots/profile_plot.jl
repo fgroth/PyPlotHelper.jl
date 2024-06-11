@@ -9,7 +9,7 @@ struct ProfilePlot <: PlotType
     ylim::Union{Nothing,Vector}
     column_names::Vector{String}
     function ProfilePlot(; print_columns::Number=2, n_profiles::Int64=1,
-                         xlabel::String="", ylabel::Union{String,Vector{String}}="",
+                         xlabel::AbstractString="", ylabel::Union{AbstractString,Vector{String}}="",
                          xscale::AbstractString="log", yscale::Union{AbstractString,Vector}="log",
                          xlim::Union{Nothing,Vector}=nothing, ylim::Union{Nothing,Vector}=nothing,
                          column_names::Vector{String}=String[])
