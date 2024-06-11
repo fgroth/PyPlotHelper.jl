@@ -88,36 +88,18 @@ function setup_plot(plot_type::PanelPlot)
     end
 
     # panel labels
-    # positions in axes units
-    x_text, horizontalalignment = if plot_type.names_position == "center"
-        0.5, "center"
-    elseif split(plot_type.names_position)[2] == "center"
-        0.5, "center"
-    elseif split(plot_type.names_position)[2] == "left"
-        0.02, "left"
-    elseif split(plot_type.names_position)[2] == "right"
-        0.98, "right"
-    end
-    y_text, verticalalignment = if plot_type.names_position == "center"
-        0.5, "center"
-    elseif split(plot_type.names_position)[1] == "center"
-        0.5, "center"
-    elseif split(plot_type.names_position)[1] == "lower"
-        0.02, "bottom"
-    elseif split(plot_type.names_position)[1] == "upper"
-        0.98, "top"
-    end
+    
     if !plot_type.plot_combined_rows & !plot_type.plot_combined_columns
-        ax[1,n_columns].text(x_text,y_text,plot_type.row_names[1]*" "*plot_type.column_names[length(plot_type.column_names)], transform=ax[1,n_columns].transAxes, horizontalalignment=horizontalalignment, verticalalignment=verticalalignment)
+        add_text_to_axis(ax[1,n_columns], plot_type.row_names[1]*" "*plot_type.column_names[length(plot_type.column_names)], loc=plot_type.names_position)
     else
-        ax[1+n_rows-length(plot_type.row_names),n_columns].text(x_text,y_text,plot_type.row_names[1], transform=ax[1+n_rows-length(plot_type.row_names),n_columns].transAxes, horizontalalignment=horizontalalignment, verticalalignment=verticalalignment)
-        ax[1,length(plot_type.column_names)].text(x_text,y_text,plot_type.column_names[end], transform=ax[1,length(plot_type.column_names)].transAxes, horizontalalignment=horizontalalignment, verticalalignment=verticalalignment)
+        add_text_to_axis(ax[1+n_rows-length(plot_type.row_names),n_columns], plot_type.row_names[1], loc=plot_type.names_position)
+        add_text_to_axis(ax[1,length(plot_type.column_names)], plot_type.column_names[end], loc=plot_type.names_position)
     end
     for i_row in 2:length(plot_type.row_names)
-        ax[i_row+n_rows-length(plot_type.row_names),n_columns].text(x_text,y_text,plot_type.row_names[i_row], transform=ax[i_row+n_rows-length(plot_type.row_names),n_columns].transAxes, horizontalalignment=horizontalalignment, verticalalignment=verticalalignment)
+        add_text_to_axis(ax[i_row+n_rows-length(plot_type.row_names),n_columns], plot_type.row_names[i_row], loc=plot_type.names_position)
     end
     for i_column in length(plot_type.column_names)-1:-1:1
-        ax[1,i_column].text(x_text,y_text,plot_type.column_names[i_column], transform=ax[1,i_column].transAxes, horizontalalignment=horizontalalignment, verticalalignment=verticalalignment)
+        add_text_to_axis(ax[1,i_column], plot_type.column_names[i_column], loc=plot_type.names_position)
     end
     
     if plot_type.plot_combined_rows & plot_type.plot_combined_columns

@@ -2,11 +2,22 @@ struct ProfilePlot <: PlotType
     print_columns::Number
     n_profiles::Int64
     xlabel::AbstractString
-    ylabel::Union{String,Vector{String}}
+    ylabel::Union{AbstractString,Vector{String}}
+    xscale::AbstractString
+    yscale::Union{AbstractString,Vector}
+    xlim::Union{Nothing,Vector}
+    ylim::Union{Nothing,Vector}
+    column_names::Vector{String}
     function ProfilePlot(; print_columns::Number=2, n_profiles::Int64=1,
-                         xlabel::String="", ylabel::Union{String,Vector{String}}="")
+                         xlabel::String="", ylabel::Union{String,Vector{String}}="",
+                         xscale::AbstractString="log", yscale::Union{AbstractString,Vector}="log",
+                         xlim::Union{Nothing,Vector}=nothing, ylim::Union{Nothing,Vector}=nothing,
+                         column_names::Vector{String}=String[])
         new(print_columns, n_profiles,
-            xlabel, ylabel)
+            xlabel, ylabel,
+            xscale, yscale,
+            xlim, ylim,
+            column_names)
     end
 end
 
@@ -32,12 +43,46 @@ function setup_plot(plot_type::ProfilePlot)
     else
         ax
     end
+    # setup x axis
     for i_ax in 1:plot_type.n_profiles
         ax[i_ax].set_xlabel(plot_type.xlabel)
+        ax[i_ax].set_xscale(plot_type.xscale)
+        ax[i_ax].set_xlim(plot_type.xlim)
     end
+    # setup yaxis: label
     for i_label in 1:minimum([length(ylabel),plot_type.n_profiles])
         ax[i_label].set_ylabel(ylabel[i_label])
     end
+    # setup yaxis: scaling
+    for i_ax in 1:plot_type.n_profiles
+        if typeof(plot_type.yscale) <: AbstractString
+            ax[i_ax].set_yscale(plot_type.yscale)
+        else 
+            ax[i_ax].set_yscale(plot_type.yscale[i_ax])
+        end
+    end
+    # setup yaxis: limits
+    for i_ax in 1:plot_type.n_profiles
+        if typeof(plot_type.ylim) <: Nothing
+            ax[i_ax].set_ylim(plot_type.ylim)
+        elseif typeof(plot_type.ylim[1]) <: Number
+                ax[i_ax].set_ylim(plot_type.ylim)
+        else # Vector of Vector
+            ax[i_ax].set_ylim(plot_type.ylim[i_ax])
+        end
+    end
+    # axis: remove ticklabels if necessary
+    if wspace == 0.01
+        for i_ax in 2:plot_type.n_profiles
+            ax[i_ax].set_yticklabels([])
+        end
+    end
+    
+    # add the column names
+    for i_label in 1:minimum([length(plot_type.column_names),plot_type.n_profiles])
+        add_text_to_axis(ax[i_label], plot_type.column_names[i_label], loc="lower left")
+    end
+    
     return fig, ax
     
 end
