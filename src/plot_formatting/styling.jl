@@ -89,7 +89,7 @@ Use `large=true` to give extra space e.g. for logarithmic axes or larger labels.
 """
 function get_bottom(; height::Number=4, large::Bool=false)
     pre_factor = if large
-        0.25
+        0.2
     else
         0.15
     end
@@ -114,7 +114,7 @@ Use `large=true` to give extra space e.g. for logarithmic axes or larger labels.
 """
 function get_left(; width::Number=4, large::Bool=false)
     pre_factor = if large
-        0.3
+        0.27
     else
         0.2
     end
