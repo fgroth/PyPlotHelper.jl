@@ -82,38 +82,52 @@ function set_dark_mode(; unset::Bool=false)
 end
 
 """
-    get_bottom(; height::Number=4)
+    get_bottom(; height::Number=4, large::Bool=false)
 
 Get value for `bottom` to have enough space for axis labels.
+Use `large=true` to give extra space e.g. for logarithmic axes or larger labels.
 """
-function get_bottom(; height::Number=4)
+function get_bottom(; height::Number=4, large::Bool=false)
+    pre_factor = if large
+        0.25
+    else
+        0.15
+    end
     # use the font size as reference
-    return 0.15 / height * matplotlib.rcParams["font.size"]/5
+    return pre_factor / height * matplotlib.rcParams["font.size"]/5
 end
 """
-    get_bottom(height::Number=4)
+    get_bottom(height::Number=4; large::Bool=false)
 
 Get value for `bottom` to have enough space for axis labels.
+Use `large=true` to give extra space e.g. for logarithmic axes or larger labels.
 """
-function get_bottom(height::Number=4)
-    return get_bottom(height=height)
-end
+# function get_bottom(height::Number=4; large::Bool=false)
+#     return get_bottom(height=height, large=large)
+# end
 
 """
-    get_left(; width::Number=4)
-
-Get value for `left` to have enough space for axis labels.
-"""
-function get_left(; width::Number=4)
-    # use the font size as reference
-    return 0.2 / width * matplotlib.rcParams["font.size"]/5
-end
-"""
-    get_left(width::Number=4)
+    get_left(; width::Number=4, large::Bool=false)
 
 Get value for `left` to have enough space for axis labels.
+Use `large=true` to give extra space e.g. for logarithmic axes or larger labels.
 """
-function get_left(width::Number=4)
+function get_left(; width::Number=4, large::Bool=false)
+    pre_factor = if large
+        0.3
+    else
+        0.2
+    end
     # use the font size as reference
-    return get_left(width=width)
+    return pre_factor / width * matplotlib.rcParams["font.size"]/5
 end
+"""
+    get_left(width::Number=4; large::Bool=false)
+
+Get value for `left` to have enough space for axis labels.
+Use `large=true` to give extra space e.g. for logarithmic axes or larger labels.
+"""
+# function get_left(width::Number=4; large::Bool=false)
+#     # use the font size as reference
+#     return get_left(width=width, large=large)
+# end
