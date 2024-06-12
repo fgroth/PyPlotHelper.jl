@@ -28,14 +28,15 @@ function setup_profile_plot(; print_columns::Number=2, n_profiles::Int64=1,
 end
 
 function setup_plot(plot_type::ProfilePlot)
+    fig = figure(figsize=(4*plot_type.n_profiles,4))
+    style_plot(fig_width=4*plot_type.n_profiles, print_columns=plot_type.print_columns)
+
     ylabel, wspace = if typeof(plot_type.ylabel) <: AbstractString
         [plot_type.ylabel], 0.01
     else
         plot_type.ylabel, get_left(width=4*plot_type.n_profiles, large=true)/(0.99/plot_type.n_profiles-get_left(width=4*plot_type.n_profiles, large=true))
     end
     
-    fig = figure(figsize=(4*plot_type.n_profiles,4))
-    style_plot(fig_width=4*plot_type.n_profiles, print_columns=plot_type.print_columns)
     gs = fig.add_gridspec(1,plot_type.n_profiles, hspace=get_bottom(height=4, large=true), wspace=wspace, left=get_left(width=4*plot_type.n_profiles, large=true), right=0.99, top=0.99, bottom=get_bottom(height=4, large=true))
     ax = gs.subplots()
     ax = if plot_type.n_profiles == 1
