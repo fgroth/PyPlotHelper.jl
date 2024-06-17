@@ -14,18 +14,19 @@ struct PanelPlot <: PlotType
     column_names::Vector{String}
     names_position::String
     no_legend::Bool
+    force_number_per_column::Union{Vector,Nothing}
     function PanelPlot(; print_columns::Number=1, plot_combined_columns::Bool=true, plot_combined_rows::Bool=true,
                        xscale::String="log", yscale::String="linear",xlim::Vector=[1e-2,1e0],ylim::Vector=[0,1],
                        xlabel::AbstractString="",ylabel::AbstractString="",
                        row_names::Vector{String}=["MFM","SPH"], column_names::Vector{String}=["relaxed","active"],
                        names_position::String="center left",
-                       no_legend::Bool=false)
+                       no_legend::Bool=false, force_number_per_column::Union{Vector,Nothing}=nothing)
         new(print_columns,plot_combined_columns,plot_combined_rows,
             xscale,yscale,xlim,ylim,
             xlabel,ylabel,
             row_names, column_names,
             names_position,
-            no_legend)
+            no_legend, force_number_per_column)
     end
 end
 
@@ -110,18 +111,63 @@ function setup_plot(plot_type::PanelPlot)
 end
 
 function add_legend(plot_type::PanelPlot, ax, lines::Vector, names::Vector)
+    
     n_columns = if plot_type.plot_combined_rows
         length(plot_type.column_names) + 1
     else
         length(plot_type.column_names)
     end
-    if (plot_type.plot_combined_columns && plot_type.plot_combined_rows)
-        ax[1,length(plot_type.column_names)].legend(lines, names, bbox_to_anchor=(1.04,0), loc="lower left", ncol=1)
+    ncol = if (plot_type.plot_combined_columns && plot_type.plot_combined_rows)
+        1
     elseif n_columns >= 4
-        ax[end-length(plot_type.row_names)+1,1].legend(lines, names, bbox_to_anchor=(0,1.04), loc="lower left", ncol=4)
+        4
     elseif n_columns >= 2
-        ax[end-length(plot_type.row_names)+1,1].legend(lines, names, bbox_to_anchor=(0,1.04), loc="lower left", ncol=2)
+        3
     else
-        ax[end-length(plot_type.row_names)+1,1].legend(lines, names, bbox_to_anchor=(0,1.04), loc="lower left", ncol=1)
+        1
+    end
+    if plot_type.force_number_per_column != nothing
+        if length(plot_type.force_number_per_column) != ncol
+            warning("the default number of columns will be over-written")
+            ncol = length(plot_type.force_number_per_column)
+        end
+        if sum(plot_type.force_number_per_column) != length(lines)
+            erros("the total number of elements per column foes not match the total number of input lines")
+        end
+        maximum_number_per_column = maximum(plot_type.force_number_per_column)
+        # check if we need paceholders
+        if !(maximum_number_per_column == minimum(plot_type.force_number_per_column))
+            # now, add some empty/invisible paceholders to labels and names, so the correct column format is enforced.
+            new_lines = Vector{Any}(undef, maximum_number_per_column*length(plot_type.force_number_per_column))
+            new_names = Vector{Any}(undef, maximum_number_per_column*length(plot_type.force_number_per_column))
+            # create the placeholder line
+            tmp_fig,tmp_ax = subplots()
+            placeholder_line, = tmp_ax.plot([],[],color=background_color())
+            close(tmp_fig)
+            
+            for i_column in 1:length(plot_type.force_number_per_column)
+                # add the placeholder first
+                for i_placeholder in 1:maximum_number_per_column-plot_type.force_number_per_column[i_column]
+                    new_lines[maximum_number_per_column*(i_column-1)+i_placeholder] = placeholder_line
+                    new_names[maximum_number_per_column*(i_column-1)+i_placeholder] = ""
+                end
+                for i_element in 1+maximum_number_per_column-plot_type.force_number_per_column[i_column]:maximum_number_per_column
+                    new_lines[maximum_number_per_column*(i_column-1)+i_element] = popfirst!(lines)
+                    new_names[maximum_number_per_column*(i_column-1)+i_element] = popfirst!(names)
+                end
+            end
+            lines = new_lines
+            names = new_names
+        end
+    end
+
+    if (plot_type.plot_combined_columns && plot_type.plot_combined_rows)
+        ax[1,length(plot_type.column_names)].legend(lines, names, bbox_to_anchor=(1.04,0), loc="lower left", ncol=ncol)
+    elseif n_columns >= 4
+        ax[end-length(plot_type.row_names)+1,1].legend(lines, names, bbox_to_anchor=(0,1.04), loc="lower left", ncol=ncol)
+    elseif n_columns >= 2
+        ax[end-length(plot_type.row_names)+1,1].legend(lines, names, bbox_to_anchor=(0,1.04), loc="lower left", ncol=ncol)
+    else
+        ax[end-length(plot_type.row_names)+1,1].legend(lines, names, bbox_to_anchor=(0,1.04), loc="lower left", ncol=ncol)
     end    
 end

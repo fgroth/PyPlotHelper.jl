@@ -34,12 +34,25 @@ end
 """
     main_color()
 
-return white for dark-mode, black for light-mode.
+Return `"white"` for dark-mode, `"black"` for light-mode.
 """
 function main_color()
     if dark_mode_active
         return "white"
     else
         return "black"
+    end
+end
+
+"""
+    background_color()
+
+Return `"black"` for dark-mode, `"white"` for light-mode.
+"""
+function background_color()
+    if dark_mode_active
+        return "black"
+    else
+        return "white"
     end
 end
