@@ -1,7 +1,5 @@
 module PyPlotHelper
 
-using PyPlot
-
 include(joinpath("plot_formatting","colors.jl"))
 include(joinpath("plot_formatting","linestyles.jl"))
 include(joinpath("plot_formatting","styling.jl"))
@@ -21,5 +19,8 @@ export PanelPlot, setup_panel_comparison_plot
 include(joinpath("standard_plots","profile_plot.jl"))
 export ProfilePlot, setup_profile_plot
 export setup_plot, add_legend
+
+include(joinpath("helper_functions","rainbow_text.jl"))
+export rainbow_text
 
 end # module
