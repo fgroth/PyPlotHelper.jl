@@ -3,6 +3,7 @@ module PyPlotHelper
 include(joinpath("plot_formatting","colors.jl"))
 include(joinpath("plot_formatting","linestyles.jl"))
 include(joinpath("plot_formatting","styling.jl"))
+export get_left, get_bottom
 
 export get_color, get_colormap,
     get_linestyle, get_marker,
