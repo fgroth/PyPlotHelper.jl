@@ -19,6 +19,8 @@ include(joinpath("standard_plots","panel_plot.jl"))
 export PanelPlot, setup_panel_comparison_plot
 include(joinpath("standard_plots","profile_plot.jl"))
 export ProfilePlot, setup_profile_plot
+include(joinpath("standard_plots","single_plot.jl"))
+export SinglePlot, setup_single_plot
 export setup_plot, add_legend
 
 include(joinpath("helper_functions","rainbow_text.jl"))
