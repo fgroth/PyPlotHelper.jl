@@ -10,16 +10,21 @@ struct SinglePlot <: PlotType
     ylabel::AbstractString
     xticks::Vector
     yticks::Vector
+    secondary_ylabel::AbstractString
+    secondary_ytransform::Tuple
+    secondary_ycolor
     function SinglePlot(; print_columns::Number=2,
                         xscale::String="linear", yscale::String="linear",
                         xlim::Vector=[nothing], ylim::Vector=[nothing],
                         xlabel::AbstractString="", ylabel::AbstractString="",
-                        xticks::Vector=[nothing], yticks::Vector=[nothing])
+                        xticks::Vector=[nothing], yticks::Vector=[nothing],
+                        secondary_ylabel::AbstractString="",secondary_ytransform::Tuple=(), secondary_ycolor="black")
         new(print_columns,
             xscale,yscale,
             xlim,ylim,
             xlabel,ylabel,
-            xticks,yticks)
+            xticks,yticks,
+            secondary_ylabel,secondary_ytransform,secondary_ycolor)
     end
 end
 
@@ -30,7 +35,12 @@ end
 function setup_plot(plot_type::SinglePlot)
     fig = figure(figsize=(6,4))
     style_plot(fig_width=6, print_columns=plot_type.print_columns)
-    gs = fig.add_gridspec(1,1, left=get_left(width=6,large=plot_type.yscale=="log"), right=0.99,
+    right = if plot_type.secondary_ylabel!="" || plot_type.secondary_ytransform!=()
+        1.0-get_left(width=6,large=plot_type.yscale=="log")
+    else
+        0.99
+    end
+    gs = fig.add_gridspec(1,1, left=get_left(width=6,large=plot_type.yscale=="log"), right=right,
                           bottom=get_bottom(height=4,large=plot_type.xscale=="log"), top=0.99)
     
     ax = gs.subplots()
@@ -53,6 +63,18 @@ function setup_plot(plot_type::SinglePlot)
     end
     if plot_type.yticks != [nothing]
         ax.set_yticks(plot_type.yticks)
+    end
+
+    if plot_type.secondary_ylabel!="" || plot_type.secondary_ytransform!=()
+        this_ytransform = if plot_type.secondary_ytransform != ()
+            plot_type.secondary_ytransform
+        else
+            (x->x,x->x)
+        end
+        ax.tick_params(right=false)
+        ax.spines["right"].set_visible(false)
+        secax = ax.secondary_yaxis("right", functions=this_ytransform, color=plot_type.secondary_ycolor)
+        secax.set_ylabel(plot_type.secondary_ylabel)
     end
 
     return fig, ax
