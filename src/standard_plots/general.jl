@@ -1,11 +1,11 @@
 abstract type PlotType end
 
 """
-    add_text_to_axis(ax, text::String; loc::String="upper right")
+    add_text_to_axis(ax, text::AbstractString; loc::String="upper right")
 
 Add text to an axis with `loc="center"/"lower/center/upper left/center/right"`
 """
-function add_text_to_axis(ax, text::String; loc::String="upper right")
+function add_text_to_axis(ax, text::AbstractString; loc::String="upper right")
     # positions in axes units
     x_text, horizontalalignment = if loc == "center"
         0.5, "center"
