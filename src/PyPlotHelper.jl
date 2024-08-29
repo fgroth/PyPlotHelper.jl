@@ -5,7 +5,7 @@ include(joinpath("plot_formatting","linestyles.jl"))
 include(joinpath("plot_formatting","styling.jl"))
 export get_left, get_bottom
 
-export get_color, get_colormap,
+export get_color, get_color_iteration, get_colormap,
     get_linestyle, get_marker,
     get_filled_marker, get_fillstyle,
     style_plot,

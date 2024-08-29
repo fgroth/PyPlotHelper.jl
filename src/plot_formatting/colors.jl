@@ -15,6 +15,15 @@ function get_color(i::Int64=1)
     return color_cycle[mod(i-1,length(color_cycle))+1] # repeat for numbers outside length
 end
 
+"""
+    get_color_iteration(i::Int64=1)
+
+Get the number of iteration of colorcycle.
+"""
+function get_color_iteration(i::Int64=1)
+    color_cycle_length = 8
+    return floor(Int64, (i-1)/color_cycle_length)+1
+end
 
 """
     get_colormap(quantity::String="rho")
