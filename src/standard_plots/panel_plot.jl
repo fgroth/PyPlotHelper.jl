@@ -139,7 +139,7 @@ function add_legend(plot_type::PanelPlot, ax, lines::Vector, names::Vector)
             ncol = length(plot_type.force_number_per_column)
         end
         if sum(plot_type.force_number_per_column) != length(lines)
-            error("the total number of elements per column foes not match the total number of input lines")
+            error("the total number of elements per column does not match the total number of input lines")
         end
         maximum_number_per_column = maximum(plot_type.force_number_per_column)
         # check if we need paceholders
