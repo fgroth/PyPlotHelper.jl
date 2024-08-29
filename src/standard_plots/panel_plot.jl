@@ -169,12 +169,12 @@ function add_legend(plot_type::PanelPlot, ax, lines::Vector, names::Vector)
     end
 
     if (plot_type.plot_combined_columns && plot_type.plot_combined_rows)
-        ax[1,length(plot_type.column_names)].legend(lines, names, bbox_to_anchor=(1.02,0), loc="lower left", ncol=ncol)
+        ax[1,length(plot_type.column_names)], ax[1,length(plot_type.column_names)].legend(lines, names, bbox_to_anchor=(1.02,0), loc="lower left", ncol=ncol)
     elseif n_columns >= 4
-        ax[end-length(plot_type.row_names)+1,1].legend(lines, names, bbox_to_anchor=(0,1.02), loc="lower left", ncol=ncol)
+        ax[end-length(plot_type.row_names)+1,1], ax[end-length(plot_type.row_names)+1,1].legend(lines, names, bbox_to_anchor=(0,1.02), loc="lower left", ncol=ncol)
     elseif n_columns >= 2
-        ax[end-length(plot_type.row_names)+1,1].legend(lines, names, bbox_to_anchor=(0,1.02), loc="lower left", ncol=ncol)
+        ax[end-length(plot_type.row_names)+1,1], ax[end-length(plot_type.row_names)+1,1].legend(lines, names, bbox_to_anchor=(0,1.02), loc="lower left", ncol=ncol)
     else
-        ax[end-length(plot_type.row_names)+1,1].legend(lines, names, bbox_to_anchor=(0,1.02), loc="lower left", ncol=ncol)
-    end    
+        ax[end-length(plot_type.row_names)+1,1], ax[end-length(plot_type.row_names)+1,1].legend(lines, names, bbox_to_anchor=(0,1.02), loc="lower left", ncol=ncol)
+    end
 end
