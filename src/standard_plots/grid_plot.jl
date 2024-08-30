@@ -34,10 +34,10 @@ end
 function setup_plot(plot_type::GridPlot)
     n_rows, n_columns = size(plot_type.names)
 
-    fig = figure(figsize=(4*n_columns*axis_ratio,4*n_rows))
-    style_plot(fig_width=4*n_columns*axis_ratio, print_columns=plot_type.print_columns)
+    fig = figure(figsize=(4*n_columns*plot_type.axis_ratio,4*n_rows))
+    style_plot(fig_width=4*n_columns*plot_type.axis_ratio, print_columns=plot_type.print_columns)
     gs = fig.add_gridspec(n_rows,n_columns,
-                          left=get_left(width=4*n_columns*axis_ratio,large=plot_type.yscale=="log"),right=0.99,
+                          left=get_left(width=4*n_columns*plot_type.axis_ratio,large=plot_type.yscale=="log"),right=0.99,
                           bottom=get_bottom(height=4*n_rows,large=plot_type.xscale=="log"), top=0.99,
                           hspace=0.01, wspace=0.01)
     ax = gs.subplots()
