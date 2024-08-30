@@ -10,11 +10,11 @@ struct GridPlot <: PlotType
     ylabel::AbstractString
     names::Matrix{String}
     names_position::String
-    function GridPlot(; print_columns::Number,
-             xscale::String, yscale::String,
-             xlim::Vector, ylim::Vector,
-             xlabel::AbstractString, ylabel::AbstractString,
-             names::Matrix{String}, names_position::String)
+    function GridPlot(; print_columns::Number=1,
+             xscale::String="linear", yscale::String="linear",
+             xlim::Vector=[0,1], ylim::Vector=[0,1],
+             xlabel::AbstractString="", ylabel::AbstractString="",
+             names::Matrix{String}=[""], names_position::String"upper left")
         new(print_columns,
             xscale, yscale,
             xlim, ylim,
