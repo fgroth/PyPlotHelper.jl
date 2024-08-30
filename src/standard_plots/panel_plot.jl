@@ -73,6 +73,7 @@ function setup_plot(plot_type::PanelPlot)
     end
     ax = reshape(ax, (n_rows,n_columns))
 
+    # scaling
     for this_ax in ax
         this_ax.set_xscale(plot_type.xscale)
         this_ax.set_yscale(plot_type.yscale)
@@ -80,6 +81,7 @@ function setup_plot(plot_type::PanelPlot)
         this_ax.set_ylim(plot_type.ylim)
     end
 
+    # axis labels
     for i_row in 1:n_rows
         for i_column in 1:n_columns
             if i_column == 1
