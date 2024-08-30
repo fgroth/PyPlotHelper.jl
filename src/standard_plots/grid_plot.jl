@@ -14,7 +14,7 @@ struct GridPlot <: PlotType
              xscale::String="linear", yscale::String="linear",
              xlim::Vector=[0,1], ylim::Vector=[0,1],
              xlabel::AbstractString="", ylabel::AbstractString="",
-             names::Matrix{String}=[""], names_position::String"upper left")
+             names::Matrix{String}=[""], names_position::String="upper left")
         new(print_columns,
             xscale, yscale,
             xlim, ylim,
