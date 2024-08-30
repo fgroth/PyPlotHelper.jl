@@ -55,7 +55,7 @@ function setup_plot(plot_type::GridPlot)
     # axis labels
     for i_row in 1:n_rows
         for i_column in 1:n_columns
-            if i_columns == 1
+            if i_column == 1
                 ax[i_row,1].set_ylabel(plot_type.ylabel)
             else
                 ax[i_row,i_column].set_yticklabels([])
