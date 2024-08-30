@@ -10,16 +10,19 @@ struct GridPlot <: PlotType
     ylabel::AbstractString
     names::Matrix{String}
     names_position::String
+    axis_ratio::Number
     function GridPlot(; print_columns::Number=1,
-             xscale::String="linear", yscale::String="linear",
-             xlim::Vector=[0,1], ylim::Vector=[0,1],
-             xlabel::AbstractString="", ylabel::AbstractString="",
-             names::Matrix{String}=[""], names_position::String="upper left")
+                      xscale::String="linear", yscale::String="linear",
+                      xlim::Vector=[0,1], ylim::Vector=[0,1],
+                      xlabel::AbstractString="", ylabel::AbstractString="",
+                      names::Matrix{String}=[""], names_position::String="upper left",
+                      axis_ratio::Number=1)
         new(print_columns,
             xscale, yscale,
             xlim, ylim,
             xlabel, ylabel,
-            names, names_position)
+            names, names_position,
+            axis_ratio)
     end
 end
 
@@ -31,10 +34,10 @@ end
 function setup_plot(plot_type::GridPlot)
     n_rows, n_columns = size(plot_type.names)
 
-    fig = figure(figsize=(4*n_columns,4*n_rows))
-    style_plot(fig_width=4*n_columns, print_columns=plot_type.print_columns)
+    fig = figure(figsize=(4*n_columns*axis_ratio,4*n_rows))
+    style_plot(fig_width=4*n_columns*axis_ratio, print_columns=plot_type.print_columns)
     gs = fig.add_gridspec(n_rows,n_columns,
-                          left=get_left(width=4*n_columns,large=plot_type.yscale=="log"),right=0.99,
+                          left=get_left(width=4*n_columns*axis_ratio,large=plot_type.yscale=="log"),right=0.99,
                           bottom=get_bottom(height=4*n_rows,large=plot_type.xscale=="log"), top=0.99,
                           hspace=0.01, wspace=0.01)
     ax = gs.subplots()
