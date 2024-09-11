@@ -12,7 +12,8 @@ export get_color, get_color_iteration, get_colormap,
     set_dark_mode, main_color
 
 include(joinpath("standard_plots","general.jl"))
-export PlotType
+export PlotType,
+    add_text_to_axis
 include(joinpath("standard_plots","maps_plot.jl"))
 export MapsPlot, setup_maps_plot
 include(joinpath("standard_plots","panel_plot.jl"))
