@@ -1,11 +1,13 @@
 abstract type PlotType end
 
 """
-    add_text_to_axis(ax, text::AbstractString; loc::String="upper right")
+    add_text_to_axis(ax, text::AbstractString; loc::String="upper right",
+                     test_kw::NamedTuple)
 
 Add text to an axis with `loc="center"/"lower/center/upper left/center/right"`
 """
-function add_text_to_axis(ax, text::AbstractString; loc::String="upper right")
+function add_text_to_axis(ax, text::AbstractString; loc::String="upper right",
+                          text_kw::NamedTuple=(;))
     # positions in axes units
     x_text, horizontalalignment = if loc == "center"
         0.5, "center"
@@ -25,5 +27,6 @@ function add_text_to_axis(ax, text::AbstractString; loc::String="upper right")
     elseif split(loc)[1] == "upper"
         0.98, "top"
     end
-    ax.text(x_text,y_text, text, transform=ax.transAxes, horizontalalignment=horizontalalignment, verticalalignment=verticalalignment)
+    ax.text(x_text,y_text, text, transform=ax.transAxes, horizontalalignment=horizontalalignment, verticalalignment=verticalalignment,
+            ;text_kw...)
 end
