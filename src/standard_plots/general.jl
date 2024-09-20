@@ -2,7 +2,7 @@ abstract type PlotType end
 
 """
     add_text_to_axis(ax, text::AbstractString; loc::String="upper right",
-                     test_kw::NamedTuple)
+                     text_kw::NamedTuple)
 
 Add text to an axis with `loc="center"/"lower/center/upper left/center/right"`
 """
