@@ -31,9 +31,9 @@ function setup_plot(plot_type::MapsPlot)
     right_space, top_space = if plot_type.external_colorscale == nothing
         0, 0
     elseif plot_type.external_colorscale == "top"
-        0, 0.2 + get_bottom(height=4*n_rows)*4*n_rows
+        0, 0.2*n_rows + get_bottom(height=4*n_rows)*4*n_rows
     elseif plot_type.external_colorscale == "right"
-        0.1, 0
+        0.2*n_cols + get_left(width=4*n_cols)*4*n_cols, 0
     else
         error("value for external_colorscale not supported (yet).")
     end
@@ -58,7 +58,7 @@ end
 function add_colorscale(plot_type::MapsPlot, fig;
                         position::Union{Nothing,String,Integer,Tuple{Integer,Integer}}=nothing,
                         cmap::String="plasma",
-                        vmin::Number=0, vmax::Number=1, label::AbstractString=L"\rho")
+                        vmin::Number=0, vmax::Number=1, label::AbstractString=L"\log\rho")
 
     # some checks for consistent values
     if position == "right" && plot_type.external_colorscale != "right"
@@ -79,19 +79,31 @@ function add_colorscale(plot_type::MapsPlot, fig;
 
     # add the colorscale for the different cases
     if position == "top"
-        top_space = 0.2
         n_rows = if typeof(plot_type.n_to_plot) <: Integer
             1
         else
             plot_type.n_to_plot[1]
         end
+        top_space = 0.2*n_rows
         top_space_labels = get_bottom(height=4*n_rows)*4*n_rows
 
         cb_ax = fig.add_axes([0.01, 1.0-(top_space+top_space_labels)/(4*n_rows+top_space+top_space_labels), 0.98, top_space/(4*n_rows+top_space)-0.02])
-        cb = colorbar(matplotlib.cm.ScalarMappable(cmap=cmap), cb_ax, orientation="horizontal")
+        cb = colorbar(matplotlib.cm.ScalarMappable(cmap=cmap, norm=matplotlib.colors.Normalize(vmin=vmin, vmax=vmax)), cb_ax, orientation="horizontal")
         cb_ax.xaxis.set_ticks_position("top")
+        cb.ax.set_title(label)
     elseif position == "right"
-        
+        n_cols = if typeof(plot_type.n_to_plot) <: Integer
+            plot_type.n_to_plot
+        else
+            plot_type.n_to_plot[2]
+        end
+        right_space = 0.2*n_cols
+        right_space_labels = get_left(width=4*n_cols)*4*n_cols
+
+        cb_ax = fig.add_axes([1.0-(right_space+right_space_labels)/(4*n_cols+right_space+right_space_labels), 0.01, right_space/(4*n_cols+right_space)-0.02, 0.98])
+        cb = colorbar(matplotlib.cm.ScalarMappable(cmap=cmap, norm=matplotlib.colors.Normalize(vmin=vmin, vmax=vmax)), cb_ax, orientation="vertical")
+        cb_ax.yaxis.set_ticks_position("right")
+        cb.set_label(label)        
     else
         error("not implemented yet")
     end
