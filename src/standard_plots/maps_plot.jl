@@ -109,3 +109,32 @@ function add_colorscale(plot_type::MapsPlot, fig;
     end
     
 end
+
+function create_separate_colorscale(; orientation::String="horizontal",
+                                    print_columns::Number=2,
+                                    cmap::String="plasma",
+                                    vmin::Number=0, vmax::Number=1,
+                                    units::AbstractString=L"\log\rho",
+                                    oname::String="colorscale.pdf")
+
+    if orientation=="horizontal"
+        style_plot(print_columns=print_columns, fig_width=16/print_columns)
+
+        cb_height = 0.2
+        text_height = get_bottom(height=1)
+        text_height *= 0.5 + sqrt(0.25+cb_height)
+        
+        fig = figure(figsize=(16/print_columns, cb_height+text_height))
+        cb_ax = fig.add_axes([0.01, 0.01, 0.98, (cb_height-0.02)/(cb_height+text_height)])
+        cb = colorbar(matplotlib.cm.ScalarMappable(cmap=cmap, norm=matplotlib.colors.Normalize(vmin=vmin, vmax=vmax)), cb_ax, orientation="horizontal")
+        cb_ax.xaxis.set_ticks_position("top")
+        cb.ax.set_title(units)
+    elseif orientation == "vertical"
+        # to implement
+    else
+        error("orientation has to be either horizontal or vertical")
+    end
+    
+    fig.savefig(oname)
+
+end
