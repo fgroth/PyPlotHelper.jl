@@ -15,7 +15,8 @@ include(joinpath("standard_plots","general.jl"))
 export PlotType,
     add_text_to_axis
 include(joinpath("standard_plots","maps_plot.jl"))
-export MapsPlot, setup_maps_plot
+export MapsPlot, setup_maps_plot,
+    add_colorscale, create_separate_colorscale
 include(joinpath("standard_plots","panel_plot.jl"))
 export PanelPlot, setup_panel_comparison_plot
 include(joinpath("standard_plots","grid_plot.jl"))
