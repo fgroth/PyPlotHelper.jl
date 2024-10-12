@@ -111,6 +111,9 @@ function setup_plot(plot_type::ProfilePlot)
         # comparison panel: yscaling and identity line
         if plot_type.comparison_panel_yrange != nothing
             ax[2,i_col].set_yscale("log")
+            ax[2,i_col].set_yticks([minimum(plot_type.comparison_panel_yrange),1,maximum(plot_type.comparison_panel_yrange)])
+            ax[2,i_col].yaxis.set_major_formatter(matplotlib.ticker.ScalarFormatter())
+            ax[2,i_col].yaxis.set_minor_formatter(matplotlib.ticker.NullFormatter())
             if plot_type.xlim != nothing
                 ax[2,i_col].plot(plot_type.xlim,[1,1],color="black",linestyle="dotted")
             end
