@@ -64,7 +64,7 @@ function setup_plot(plot_type::ProfilePlot)
     else
         ax
     end
-    reshape(ax, n_rows, plot_type.n_profiles)
+    ax = reshape(ax, n_rows, plot_type.n_profiles)
     
     # setup x axis
     for i_col in 1:plot_type.n_profiles
