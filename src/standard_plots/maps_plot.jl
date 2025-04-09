@@ -55,6 +55,14 @@ function setup_plot(plot_type::MapsPlot)
     return fig,ax
 end
 
+"""
+    add_colorscale(plot_type::MapsPlot, fig;
+                   position::Union{Nothing,String,Integer,Tuple{Integer,Integer}}=nothing,
+                   cmap::String="plasma",
+                   vmin::Number=0, vmax::Number=1, label::AbstractString=L"\\log\\rho")
+
+Plot a colorbar into an existing figure.
+"""
 function add_colorscale(plot_type::MapsPlot, fig;
                         position::Union{Nothing,String,Integer,Tuple{Integer,Integer}}=nothing,
                         cmap::String="plasma",
@@ -74,7 +82,7 @@ function add_colorscale(plot_type::MapsPlot, fig;
     elseif position == nothing && typeof(n_to_plot) <: Integer
         position = 1
     elseif position == nothing && typeof(n_to_plot) <: Tuple{Integer,Integer}
-        posision=(1,1)
+        position=(1,1)
     end
 
     # add the colorscale for the different cases
@@ -110,6 +118,16 @@ function add_colorscale(plot_type::MapsPlot, fig;
     
 end
 
+"""
+    create_separate_colorscale(; orientation::String="horizontal",
+                               print_columns::Number=2,
+                               cmap::String="plasma",
+                               vmin::Number=0, vmax::Number=1,
+                               units::AbstractString=L"\\log\\rho",
+                               oname::String="colorscale.pdf")
+
+Create and save a colorbar in a separate figure.
+"""
 function create_separate_colorscale(; orientation::String="horizontal",
                                     print_columns::Number=2,
                                     cmap::String="plasma",
