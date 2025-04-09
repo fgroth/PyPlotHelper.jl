@@ -65,7 +65,7 @@ function setup_plot(plot_type::PanelPlot)
     style_plot(fig_width=4*n_columns, print_columns=plot_type.print_columns)
     gs = fig.add_gridspec(n_rows,n_columns,
                           left=get_left(width=4*n_columns,large=plot_type.yscale=="log"),right=0.99,
-                          bottom=get_bottom(height=4*n_rows+legend_space,large=plot_type.xscale=="log"), top=minimum([0.99,1-legend_space/(4*n_rows)]),
+                          bottom=get_bottom(height=4*n_rows+legend_space,large=plot_type.xscale=="log"), top=minimum([0.99,1-legend_space/(4*n_rows+legend_space)]),
                           hspace=0.01, wspace=0.01)
     ax = gs.subplots()
     if n_rows*n_columns == 1
