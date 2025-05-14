@@ -36,7 +36,7 @@ function get_colormap(quantity::String="rho")
     elseif lowercase(quantity) in ["t(u)","t","temp"]
         return "inferno"
     elseif lowercase(quantity) in ["stars"]
-        return "Greys"
+        return "gray"
     else
         error("quantity value not allowed")
     end
