@@ -37,6 +37,8 @@ function get_colormap(quantity::String="rho")
         return "inferno"
     elseif lowercase(quantity) in ["stars"]
         return "gray"
+    elseif startswith(uppercase(property),"X-RAY")
+        return "afmhot"
     else
         error("quantity value not allowed")
     end
