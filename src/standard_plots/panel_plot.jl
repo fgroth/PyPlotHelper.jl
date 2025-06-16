@@ -16,20 +16,21 @@ struct PanelPlot <: PlotType
     no_legend::Bool
     force_number_per_column::Union{Vector,Nothing}
     small_legend::Bool
+    legend_inside::Bool
     function PanelPlot(; print_columns::Number=1, plot_combined_columns::Bool=true, plot_combined_rows::Bool=true,
                        xscale::String="log", yscale::String="linear",xlim::Vector=[1e-2,1e0],ylim::Vector=[0,1],
                        xlabel::AbstractString="",ylabel::AbstractString="",
                        row_names::Vector{String}=["MFM","SPH"], column_names::Vector{String}=["relaxed","active"],
                        names_position::String="center left",
                        no_legend::Bool=false, force_number_per_column::Union{Vector,Nothing}=nothing,
-                       small_legend::Bool=false)
+                       small_legend::Bool=false, legend_inside::Bool=false)
         new(print_columns,plot_combined_columns,plot_combined_rows,
             xscale,yscale,xlim,ylim,
             xlabel,ylabel,
             row_names, column_names,
             names_position,
             no_legend, force_number_per_column,
-            small_legend)
+            small_legend, legend_inside)
     end
 end
 
@@ -48,7 +49,7 @@ function setup_plot(plot_type::PanelPlot)
     else
         length(plot_type.column_names)
     end
-    legend_space = if (plot_type.plot_combined_columns && plot_type.plot_combined_rows) || plot_type.no_legend
+    legend_space = if (plot_type.plot_combined_columns && plot_type.plot_combined_rows) || plot_type.no_legend || plot_type.legend_inside
         0
     elseif n_columns >= 4
         1
@@ -170,7 +171,9 @@ function add_legend(plot_type::PanelPlot, ax, lines::Vector, names::Vector)
         end
     end
 
-    if (plot_type.plot_combined_columns && plot_type.plot_combined_rows)
+    if plot_type.legend_inside
+        ax[1,length(plot_type.column_names)], ax[1,length(plot_type.column_names)].legend(lines, names, loc="upper left", ncol=ncol)        
+    elseif (plot_type.plot_combined_columns && plot_type.plot_combined_rows)
         ax[1,length(plot_type.column_names)], ax[1,length(plot_type.column_names)].legend(lines, names, bbox_to_anchor=(1.02,0), loc="lower left", ncol=ncol)
     elseif n_columns >= 4
         ax[end-length(plot_type.row_names)+1,1], ax[end-length(plot_type.row_names)+1,1].legend(lines, names, bbox_to_anchor=(0,1.02), loc="lower left", ncol=ncol)
