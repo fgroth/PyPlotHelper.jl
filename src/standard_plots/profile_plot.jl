@@ -10,19 +10,20 @@ struct ProfilePlot <: PlotType
     xlim::Union{Nothing,Vector}
     ylim::Union{Nothing,Vector}
     column_names::Vector{String}
+    label_loc::String
     comparison_panel_yrange::Union{Nothing,Vector}
     comparison_panel_name::String
     function ProfilePlot(; print_columns::Number=2, n_profiles::Int64=1,
                          xlabel::AbstractString="", ylabel::Union{AbstractString,Vector{String}}="",
                          xscale::AbstractString="log", yscale::Union{AbstractString,Vector}="log",
                          xlim::Union{Nothing,Vector}=nothing, ylim::Union{Nothing,Vector}=nothing,
-                         column_names::Vector{String}=String[],
+                         column_names::Vector{String}=String[], label_loc::String="lower left",
                          comparison_panel_yrange::Union{Nothing,Vector}=nothing, comparison_panel_name::String="")
         new(print_columns, n_profiles,
             xlabel, ylabel,
             xscale, yscale,
             xlim, ylim,
-            column_names,
+            column_names, label_loc,
             comparison_panel_yrange,comparison_panel_name)
     end
 end
@@ -147,7 +148,7 @@ function setup_plot(plot_type::ProfilePlot)
     
     # add the column names
     for i_label in 1:minimum([length(plot_type.column_names),plot_type.n_profiles])
-        add_text_to_axis(ax[1,i_label], plot_type.column_names[i_label], loc="lower left")
+        add_text_to_axis(ax[1,i_label], plot_type.column_names[i_label], loc=plot_type.label_loc)
     end
     
     return fig, ax
