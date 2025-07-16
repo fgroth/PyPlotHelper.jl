@@ -39,8 +39,16 @@ function get_colormap(quantity::String="rho")
         return "gray"
     elseif startswith(uppercase(quantity),"X-RAY")
         return "afmhot"
+    elseif startswith(uppercase(quantity),"V")
+        if endswith(uppercase(quantity),"ABS")
+            # absolve velocity, choose perceptually uniform colormap
+            return "magma"
+        else
+            # with negative values as well, choose diverging colormap
+            return "RdBu"
+        end
     else
-        error("quantity value not allowed")
+        error("quantity="*quantity" value not allowed")
     end
 end
 
