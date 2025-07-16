@@ -48,7 +48,7 @@ function get_colormap(quantity::String="rho")
             return "RdBu"
         end
     else
-        error("quantity="*quantity" value not allowed")
+        error("quantity="*quantity*" value not allowed")
     end
 end
 
