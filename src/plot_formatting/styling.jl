@@ -36,8 +36,8 @@ function style_plot(; print_columns::Number=1, n_plots_side_by_side::Number=1.0,
     rc("axes", labelsize = axis_label_font_size, titlesize = title_font_size, labelpad=axis_label_font_size/5)
     
     # axes: ticks
-    rc("xtick", direction = "in", top = true)
-    rc("ytick", direction = "in", right = true)
+    rc("xtick", direction = "in", top = true, labelsize=0.9*axis_label_font_size)
+    rc("ytick", direction = "in", right = true, labelsize=0.9*axis_label_font_size)
 
     # legend
     rc("legend", frameon = false, handletextpad = 0.4)
