@@ -31,6 +31,7 @@ end
 returns a colormap typically used for the quantity
 """
 function get_colormap(quantity::String="rho")
+    # also see https://matplotlib.org/stable/users/explain/colors/colormaps.html
     if lowercase(quantity) in ["rho", "density", "gas_density"]
         return "inferno" #"plasma"
     elseif lowercase(quantity) in ["t(u)","t","temp"]
@@ -39,6 +40,8 @@ function get_colormap(quantity::String="rho")
         return "gray"
     elseif startswith(uppercase(quantity),"X-RAY")
         return "afmhot"
+    elseif contains(quantity,"SZ")
+        return "jet"
     elseif startswith(uppercase(quantity),"V")
         if endswith(uppercase(quantity),"ABS")
             # absolve velocity, choose perceptually uniform colormap
