@@ -4,20 +4,20 @@ struct ProfilePlot <: PlotType
     print_columns::Number
     n_profiles::Int64
     xlabel::AbstractString
-    ylabel::Union{AbstractString,Vector{String}}
+    ylabel::Union{AbstractString,Vector{<:AbstractString}}
     xscale::AbstractString
     yscale::Union{AbstractString,Vector}
     xlim::Union{Nothing,Vector}
     ylim::Union{Nothing,Vector}
-    column_names::Vector{String}
+    column_names::Vector{<:AbstractString}
     label_loc::String
     comparison_panel_yrange::Union{Nothing,Vector}
     comparison_panel_name::String
     function ProfilePlot(; print_columns::Number=2, n_profiles::Int64=1,
-                         xlabel::AbstractString="", ylabel::Union{AbstractString,Vector{String}}="",
+                         xlabel::AbstractString="", ylabel::Union{AbstractString,Vector{<:AbstractString}}="",
                          xscale::AbstractString="log", yscale::Union{AbstractString,Vector}="log",
                          xlim::Union{Nothing,Vector}=nothing, ylim::Union{Nothing,Vector}=nothing,
-                         column_names::Vector{String}=String[], label_loc::String="lower left",
+                         column_names::Vector{<:AbstractString}=String[], label_loc::String="lower left",
                          comparison_panel_yrange::Union{Nothing,Vector}=nothing, comparison_panel_name::String="")
         new(print_columns, n_profiles,
             xlabel, ylabel,
@@ -29,7 +29,7 @@ struct ProfilePlot <: PlotType
 end
 
 function setup_profile_plot(; print_columns::Number=2, n_profiles::Int64=1,
-                            xlabel::String="", ylabel::Union{String,Vector{String}}="")
+                            xlabel::String="", ylabel::Union{String,Vector{<:AbstractString}}="")
     setup_plot(ProfilePlot(print_columns=print_columns, n_profiles=n_profiles,
                            xlabel=xlabel,ylabel=ylabel))
 end

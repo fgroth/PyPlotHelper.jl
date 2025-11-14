@@ -10,8 +10,8 @@ struct PanelPlot <: PlotType
     ylim::Vector
     xlabel::AbstractString
     ylabel::AbstractString
-    row_names::Vector{String}
-    column_names::Vector{String}
+    row_names::Vector{<:AbstractString}
+    column_names::Vector{<:AbstractString}
     names_position::String
     no_legend::Bool
     force_number_per_column::Union{Vector,Nothing}
@@ -20,7 +20,7 @@ struct PanelPlot <: PlotType
     function PanelPlot(; print_columns::Number=1, plot_combined_columns::Bool=true, plot_combined_rows::Bool=true,
                        xscale::String="log", yscale::String="linear",xlim::Vector=[1e-2,1e0],ylim::Vector=[0,1],
                        xlabel::AbstractString="",ylabel::AbstractString="",
-                       row_names::Vector{String}=["MFM","SPH"], column_names::Vector{String}=["relaxed","active"],
+                       row_names::Vector{<:AbstractString}=["MFM","SPH"], column_names::Vector{<:AbstractString}=["relaxed","active"],
                        names_position::String="center left",
                        no_legend::Bool=false, force_number_per_column::Union{Vector,Nothing}=nothing,
                        small_legend::Bool=false, legend_inside::String="")
@@ -172,7 +172,7 @@ function add_legend(plot_type::PanelPlot, ax, lines::Vector, names::Vector)
     end
 
     if plot_type.legend_inside != ""
-        ax[1,length(plot_type.column_names)].legend(lines, names, loc=plot_type.legend_inside, ncol=ncol)        
+        ax[1,1].legend(lines, names, loc=plot_type.legend_inside, ncol=ncol)        
     elseif (plot_type.plot_combined_columns && plot_type.plot_combined_rows)
         ax[1,length(plot_type.column_names)].legend(lines, names, bbox_to_anchor=(1.02,0), loc="lower left", ncol=ncol)
     elseif n_columns >= 4
