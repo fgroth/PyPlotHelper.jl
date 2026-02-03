@@ -1,4 +1,3 @@
-using PyPlot
 
 """
     get_linestyle(i::Int64=1)

@@ -1,4 +1,3 @@
-using PyPlot
 
 global dark_mode_default_color_cycle = ["red", "green", "turquoise", "blue", "purple", "magenta", "white", "gray"]
 global light_mode_default_color_cycle = ["red", "green", "turquoise", "blue", "purple", "magenta", "black", "gray"]
