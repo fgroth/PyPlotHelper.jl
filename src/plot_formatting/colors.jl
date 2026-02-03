@@ -1,5 +1,33 @@
 using PyPlot
 
+global dark_mode_default_color_cycle = ["red", "green", "turquoise", "blue", "purple", "magenta", "white", "gray"]
+global light_mode_default_color_cycle = ["red", "green", "turquoise", "blue", "purple", "magenta", "black", "gray"]
+
+global dark_mode_color_cycle = dark_mode_default_color_cycle
+global light_mode_color_cycle = light_mode_default_color_cycle
+
+"""
+    set_color_cycle(new_color_cycle::Vector)
+
+Adjust the color cycle variable. Also see [`reset_color_cycle`](@ref).
+"""
+function set_color_cycle(new_color_cycle::Vector)
+    if dark_mode_active
+        global dark_mode_color_cycle = new_color_cycle
+    else
+        global light_mode_color_cycle = new_color_cycle
+    end
+end
+"""
+    reset_color_cycle()
+
+Reset the color cycle variable to the default value.
+"""
+function reset_color_cycle()
+    global dark_mode_color_cycle = dark_mode_default_color_cycle
+    global light_mode_color_cycle = light_mode_default_color_cycle
+end
+
 """
     get_color(i::Int64=1)
 
@@ -7,9 +35,9 @@ returns a color at position i of commonly used color cycle.
 """
 function get_color(i::Int64=1)
     if dark_mode_active
-        color_cycle = ["red", "green", "turquoise", "blue", "purple", "magenta", "white", "gray"]
+        color_cycle = dark_mode_color_cycle
     else
-        color_cycle = ["red", "green", "turquoise", "blue", "purple", "magenta", "black", "gray"]
+        color_cycle = light_mode_color_cycle
     end
     
     return color_cycle[mod(i-1,length(color_cycle))+1] # repeat for numbers outside length
