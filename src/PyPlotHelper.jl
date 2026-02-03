@@ -1,15 +1,17 @@
 module PyPlotHelper
 
 include(joinpath("plot_formatting","colors.jl"))
+export set_color_cycle, reset_color_cycle,
+    get_color, get_color_iteration, get_colormap,
+    main_color
 include(joinpath("plot_formatting","linestyles.jl"))
+export get_linestyle, get_marker,
+    get_filled_marker, get_fillstyle
 include(joinpath("plot_formatting","styling.jl"))
-export get_left, get_bottom
+export style_plot,
+    set_dark_mode,
+    get_left, get_bottom
 
-export get_color, get_color_iteration, get_colormap,
-    get_linestyle, get_marker,
-    get_filled_marker, get_fillstyle,
-    style_plot,
-    set_dark_mode, main_color
 
 include(joinpath("standard_plots","general.jl"))
 export PlotType,
