@@ -4,10 +4,11 @@ struct MapsPlot <: PlotType
     print_columns::Number
     n_to_plot::Union{Integer,Tuple{Integer,Integer}}
     external_colorscale::Union{Nothing,String}
+    projection::Union{Nothing,Array}
     function MapsPlot(; print_columns::Number=2, n_to_plot::Union{Integer,Tuple{Integer,Integer}}=2,
-                      external_colorscale::Union{Nothing,String}=nothing)
+                      external_colorscale::Union{Nothing,String}=nothing, projection::Union{Nothing,Array}=nothing)
         new(print_columns,n_to_plot,
-            external_colorscale)
+            external_colorscale, projection)
     end
 end
 
@@ -42,16 +43,37 @@ function setup_plot(plot_type::MapsPlot)
     fig = figure(figsize=(4*n_cols+right_space,4*n_rows+top_space))
     style_plot(fig_width=4*n_cols,print_columns=plot_type.print_columns)
     gs = fig.add_gridspec(n_rows,n_cols, hspace=0.01, wspace=0.01, left=0.01,right=0.99-right_space/(4*n_rows+right_space),top=0.99-top_space/(4*n_rows+top_space),bottom=0.01)
-    ax = gs.subplots()
-    ax = if plot_type.n_to_plot == 1 || plot_type.n_to_plot == (1,1)
-        [ax]
+
+    # ensure we can access it at any index
+    if isa(plot_type.projection, Nothing)
+        projection = Array{Any}(undef, n_to_plot)
+        projection .= nothing
     else
-        ax
+        projection = plot_type.projection
     end
-    for this_ax in ax
-        this_ax.set_xticks([])
-        this_ax.set_yticks([])
+    if ndims(projection) == 1
+        projection = reshape(projection,  (n_rows, n_cols))
     end
+    
+    # do the axes individually, in case one should have a different projection.
+    ax = Array{Any}(undef, n_rows, n_cols)
+
+    for i_row in 1:n_rows, j_col in 1:n_cols
+        if isa(projection[i_row,j_col], Nothing)
+            ax[i_row,j_col] = fig.add_subplot(gs[i_row,j_col])
+            ax[i_row,j_col].set_xticks([])
+            ax[i_row,j_col].set_yticks([])
+        else
+            ax[i_row,j_col] = fig.add_subplot(gs[i_row,j_col], projection=projection[i_row,j_col])
+            ax[i_row,j_col].tick_params(axis="x", direction="in", colors="white", bottom=true, top=true, verticalalignment="bottom", pad=-10)
+            ax[i_row,j_col].tick_params(axis="y", direction="in", colors="white", left=true, right=true, horizontalalignment="left", pad=-20)
+            ax[i_row,j_col].coords[1].set_axislabel("")
+            ax[i_row,j_col].coords[2].set_axislabel("")
+            ax[i_row,j_col].coords[1].set_auto_axislabel("")
+            ax[i_row,j_col].coords[2].set_auto_axislabel("")
+        end
+    end
+
     return fig,ax
 end
 
