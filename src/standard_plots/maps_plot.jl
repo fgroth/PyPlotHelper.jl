@@ -65,12 +65,14 @@ function setup_plot(plot_type::MapsPlot)
             ax[i_row,j_col].set_yticks([])
         else
             ax[i_row,j_col] = fig.add_subplot(gs[i_row,j_col], projection=projection[i_row,j_col])
-            ax[i_row,j_col].tick_params(axis="x", direction="in", colors="white", bottom=true, top=true, verticalalignment="bottom", pad=-10)
-            ax[i_row,j_col].tick_params(axis="y", direction="in", colors="white", left=true, right=true, horizontalalignment="left", pad=-20)
+            ax[i_row,j_col].tick_params(axis="x", direction="in", colors="white", bottom=true, top=true, verticalalignment="bottom", pad=-0.95*title_font_size)
+            ax[i_row,j_col].tick_params(axis="y", direction="in", colors="white", left=true, right=true, horizontalalignment="left", pad=-1.5*title_font_size)
             ax[i_row,j_col].coords[1].set_axislabel("")
             ax[i_row,j_col].coords[2].set_axislabel("")
             ax[i_row,j_col].coords[1].set_auto_axislabel("")
             ax[i_row,j_col].coords[2].set_auto_axislabel("")
+            # todo: do we want to show a coordinate grid?
+            #ax[i_row,j_col].coords.grid(true, color="white", ls="dotted")
         end
     end
 
