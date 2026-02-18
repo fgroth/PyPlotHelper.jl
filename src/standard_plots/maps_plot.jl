@@ -29,12 +29,12 @@ function setup_plot(plot_type::MapsPlot)
         plot_type.n_to_plot[2]
     end
 
-    right_space, top_space = if plot_type.external_colorscale == nothing
+    right_space, top_space = if isa(plot_type.external_colorscale, Nothing)
         0, 0
     elseif plot_type.external_colorscale == "top"
         0, 0.2*n_rows + get_bottom(height=4*n_rows)*4*n_rows
     elseif plot_type.external_colorscale == "right"
-        0.2*n_cols + get_left(width=4*n_cols)*4*n_cols, 0
+        (0.2 + get_left(width=4*n_cols)*4), 0
     else
         error("value for external_colorscale not supported (yet).")
     end
@@ -46,7 +46,7 @@ function setup_plot(plot_type::MapsPlot)
 
     # ensure we can access it at any index
     if isa(plot_type.projection, Nothing)
-        projection = Array{Any}(undef, n_to_plot)
+        projection = Array{Any}(undef, plot_type.n_to_plot)
         projection .= nothing
     else
         projection = plot_type.projection
@@ -103,9 +103,9 @@ function add_colorscale(plot_type::MapsPlot, fig;
     # choose proper default value
     if position == nothing && typeof(plot_type.external_colorscale) <: String
         position = plot_type.external_colorscale
-    elseif position == nothing && typeof(n_to_plot) <: Integer
+    elseif position == nothing && typeof(plot_type.n_to_plot) <: Integer
         position = 1
-    elseif position == nothing && typeof(n_to_plot) <: Tuple{Integer,Integer}
+    elseif position == nothing && typeof(plot_type.n_to_plot) <: Tuple{Integer,Integer}
         position=(1,1)
     end
 
