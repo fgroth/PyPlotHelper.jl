@@ -29,6 +29,7 @@ function setup_plot(plot_type::MapsPlot)
         plot_type.n_to_plot[2]
     end
 
+    style_plot(fig_width=4*n_cols,print_columns=plot_type.print_columns)
     right_space, top_space = if isa(plot_type.external_colorscale, Nothing)
         0, 0
     elseif plot_type.external_colorscale == "top"
@@ -41,7 +42,7 @@ function setup_plot(plot_type::MapsPlot)
 
     # now create the actual figure and axis
     fig = figure(figsize=(4*n_cols+right_space,4*n_rows+top_space))
-    style_plot(fig_width=4*n_cols,print_columns=plot_type.print_columns)
+    style_plot(fig_width=4*n_cols+right_space,print_columns=plot_type.print_columns)
     gs = fig.add_gridspec(n_rows,n_cols, hspace=0.01, wspace=0.01, left=0.01,right=0.99-right_space/(4*n_rows+right_space),top=0.99-top_space/(4*n_rows+top_space),bottom=0.01)
 
     # ensure we can access it at any index
