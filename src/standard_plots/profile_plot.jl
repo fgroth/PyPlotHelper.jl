@@ -3,9 +3,9 @@ using PyPlot
 struct ProfilePlot <: PlotType
     print_columns::Number
     n_profiles::Int64
-    xlabel::AbstractString
+    xlabel::Union{AbstractString,Vector{<:AbstractString}}
     ylabel::Union{AbstractString,Vector{<:AbstractString}}
-    xscale::AbstractString
+    xscale::Union{AbstractString,Vector}
     yscale::Union{AbstractString,Vector}
     xlim::Union{Nothing,Vector}
     ylim::Union{Nothing,Vector}
@@ -14,8 +14,8 @@ struct ProfilePlot <: PlotType
     comparison_panel_yrange::Union{Nothing,Vector}
     comparison_panel_name::String
     function ProfilePlot(; print_columns::Number=2, n_profiles::Int64=1,
-                         xlabel::AbstractString="", ylabel::Union{AbstractString,Vector{<:AbstractString}}="",
-                         xscale::AbstractString="log", yscale::Union{AbstractString,Vector}="log",
+                         xlabel::Union{AbstractString,Vector{<:AbstractString}}="", ylabel::Union{AbstractString,Vector{<:AbstractString}}="",
+                         xscale::Union{AbstractString,Vector}="log", yscale::Union{AbstractString,Vector}="log",
                          xlim::Union{Nothing,Vector}=nothing, ylim::Union{Nothing,Vector}=nothing,
                          column_names::Vector{<:AbstractString}=String[], label_loc::String="lower left",
                          comparison_panel_yrange::Union{Nothing,Vector}=nothing, comparison_panel_name::String="")
@@ -29,7 +29,7 @@ struct ProfilePlot <: PlotType
 end
 
 function setup_profile_plot(; print_columns::Number=2, n_profiles::Int64=1,
-                            xlabel::String="", ylabel::Union{String,Vector{<:AbstractString}}="")
+                            xlabel::Union{String,Vector{<:AbstractString}}="", ylabel::Union{String,Vector{<:AbstractString}}="")
     setup_plot(ProfilePlot(print_columns=print_columns, n_profiles=n_profiles,
                            xlabel=xlabel,ylabel=ylabel))
 end
@@ -47,6 +47,11 @@ function setup_plot(plot_type::ProfilePlot)
         [plot_type.ylabel], 0.01
     else
         plot_type.ylabel, get_left(width=4*plot_type.n_profiles, large=true)/(0.99/plot_type.n_profiles-get_left(width=4*plot_type.n_profiles, large=true))
+    end
+    xlabel = if isa(plot_type.xlabel, AbstractString)
+        repeat([plot_type.xlabel], plot_type.n_profiles)
+    else
+        plot_type.xlabel
     end
     n_rows, height_ratios = if plot_type.comparison_panel_yrange != nothing
         2, [2,1]
@@ -70,7 +75,11 @@ function setup_plot(plot_type::ProfilePlot)
     # setup x axis
     for i_col in 1:plot_type.n_profiles
         # main plot
-        ax[1,i_col].set_xscale(plot_type.xscale)
+        if isa(plot_type.xscale, AbstractString)
+            ax[1,i_col].set_xscale(plot_type.xscale)
+        else
+            ax[1,i_col].set_xscale(plot_type.xscale[i_col])
+        end
         if typeof(plot_type.xlim) <: Nothing
             ax[1,i_col].set_xlim(auto=true)
         else
@@ -78,20 +87,27 @@ function setup_plot(plot_type::ProfilePlot)
         end
         # comparison panel
         if plot_type.comparison_panel_yrange != nothing
-            ax[2,i_col].set_xscale(plot_type.xscale)
+            if isa(plot_type.xscale, AbstractString)
+                ax[2,i_col].set_xscale(plot_type.xscale)
+            else
+                ax[2,i_col].set_xscale(plot_type.xscale[i_col])
+            end
             if typeof(plot_type.xlim) <: Nothing
                 ax[2,i_col].set_xlim(auto=true)
             else
                 ax[2,i_col].set_xlim(plot_type.xlim)
             end    
         end
-        # xlabel (depends on if comparison_panel exists)
-        if plot_type.comparison_panel_yrange != nothing
-            ax[2,i_col].set_xlabel(plot_type.xlabel)
-            # also remove xtickslabels for upper panel
-            ax[1,i_col].set_xticklabels([])
-        else
-            ax[1,i_col].set_xlabel(plot_type.xlabel)
+        # xlabel
+        if length(xlabel) >= i_col
+            # (position depends on if comparison_panel exists)
+            if plot_type.comparison_panel_yrange != nothing
+                ax[2,i_col].set_xlabel(xlabel[i_col])
+                # also remove xtickslabels for upper panel
+                ax[1,i_col].set_xticklabels([])
+            else
+                ax[1,i_col].set_xlabel(xlabel[i_col])
+            end
         end
     end
     # setup yaxis: label
