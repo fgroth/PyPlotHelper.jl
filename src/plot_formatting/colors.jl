@@ -72,6 +72,8 @@ function get_colormap(quantity::String="rho")
     elseif lowercase(quantity) in ["b", "bx", "by", "bz", "bfld"]
         # diverging colormap
         return "twilight_shifted"
+    elseif lowercase(quantity) == "pb"
+        return "inferno"
     elseif startswith(uppercase(quantity),"V")
         if endswith(uppercase(quantity),"ABS")
             # absolve velocity, choose perceptually uniform colormap
