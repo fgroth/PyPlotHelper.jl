@@ -34,4 +34,6 @@ export setup_plot, add_legend
 include(joinpath("helper_functions","rainbow_text.jl"))
 export rainbow_text
 
+include(joinpath("init.jl"))
+
 end # module
