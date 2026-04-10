@@ -82,8 +82,12 @@ function get_colormap(quantity::String="rho")
             # with negative values as well, choose diverging colormap
             return "RdBu"
         end
-    elseif startswith(quantity,"dispersion")
-        return "magma"
+    elseif contains(uppercase(quantity),"VEL")
+        if startswith(quantity,"dispersion")
+            return "magma"
+        else
+            return "RdBu"
+        end
     else
         error("quantity="*quantity*" value not allowed")
     end
