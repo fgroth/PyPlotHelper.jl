@@ -1,5 +1,6 @@
 using PyPlot
 
+global title_font_size = 6.0 # reasonable default
 """
     plot_styling(; print_columns::Number=1,n_plots_side_by_side::Number=1.0,print_width::Number=-1.0,fig_width::Number=4.0,mode::String="publication")
 
