@@ -12,7 +12,7 @@ struct ProfilePlot <: PlotType
     column_names::Vector{<:AbstractString}
     label_loc::String
     comparison_panel_yrange::Union{Nothing,Vector}
-    comparison_panel_name::AbstractString
+    comparison_panel_name::Union{AbstractString,Vector{<:AbstractString}}
     function ProfilePlot(; print_columns::Number=2, n_profiles::Int64=1,
                          xlabel::Union{AbstractString,Vector{<:AbstractString}}="", ylabel::Union{AbstractString,Vector{<:AbstractString}}="",
                          xscale::Union{AbstractString,Vector}="log", yscale::Union{AbstractString,Vector}="log",
