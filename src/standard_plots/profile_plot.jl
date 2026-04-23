@@ -117,7 +117,7 @@ function setup_plot(plot_type::ProfilePlot)
         if plot_type.comparison_panel_yrange != nothing
             if typeof(plot_type.comparison_panel_name) <: AbstractString
                 ax[2,i_label].set_ylabel(plot_type.comparison_panel_name)
-            elseif length(plot_type.comparison_panel_name >= i_label)
+            elseif length(plot_type.comparison_panel_name) >= i_label
                 ax[2,i_label].set_ylabel(plot_type.comparison_panel_name[i_label])
             end
         end
