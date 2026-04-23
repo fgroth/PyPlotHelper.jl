@@ -18,7 +18,7 @@ struct ProfilePlot <: PlotType
                          xscale::Union{AbstractString,Vector}="log", yscale::Union{AbstractString,Vector}="log",
                          xlim::Union{Nothing,Vector}=nothing, ylim::Union{Nothing,Vector}=nothing,
                          column_names::Vector{<:AbstractString}=String[], label_loc::String="lower left",
-                         comparison_panel_yrange::Union{Nothing,Vector}=nothing, comparison_panel_name::AbstractString="")
+                         comparison_panel_yrange::Union{Nothing,Vector}=nothing, comparison_panel_name::Union{AbstractString,Vector{<:AbstractString}}="")
         new(print_columns, n_profiles,
             xlabel, ylabel,
             xscale, yscale,
@@ -115,7 +115,11 @@ function setup_plot(plot_type::ProfilePlot)
         ax[1,i_label].set_ylabel(ylabel[i_label])
         # comparison ylabel
         if plot_type.comparison_panel_yrange != nothing
-            ax[2,i_label].set_ylabel(plot_type.comparison_panel_name)
+            if typeof(plot_type.comparison_panel_name) <: AbstractString
+                ax[2,i_label].set_ylabel(plot_type.comparison_panel_name)
+            elseif length(plot_type.comparison_panel_name >= i_label)
+                ax[2,i_label].set_ylabel(plot_type.comparison_panel_name[i_label])
+            end
         end
     end
     # setup yaxis: scaling
