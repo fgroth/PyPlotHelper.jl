@@ -146,7 +146,7 @@ function setup_plot(plot_type::ProfilePlot)
         if typeof(plot_type.ylim) <: Nothing
             ax[1,i_col].set_ylim(auto=true)
         elseif typeof(plot_type.ylim[1]) <: Number
-                ax[1,i_col].set_ylim(plot_type.ylim)
+            ax[1,i_col].set_ylim(plot_type.ylim)
         else # Vector of Vector
             ax[1,i_col].set_ylim(plot_type.ylim[i_col])
         end
