@@ -4,6 +4,8 @@ include(joinpath("plot_formatting","colors.jl"))
 export set_color_cycle, reset_color_cycle,
     get_color, get_color_iteration, get_colormap,
     main_color
+include(joinpath("plot_formatting","colors_from_cmap.jl"))
+export get_color_from_colormap
 include(joinpath("plot_formatting","linestyles.jl"))
 export get_linestyle, get_marker,
     get_filled_marker, get_fillstyle
