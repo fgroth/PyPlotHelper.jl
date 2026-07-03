@@ -28,6 +28,19 @@ function reset_color_cycle()
 end
 
 """
+    append_to_color_cycle(new_color)
+
+Add color to the end of the (active) color cycle
+"""
+function append_to_color_cycle(new_color)
+    if dark_mode_active
+        append!(dark_mode_color_cycle, [new_color])
+    else
+        append!(light_mode_color_cycle, [new_color])
+    end
+end
+
+"""
     get_color(i::Int64=1)
 
 returns a color at position i of commonly used color cycle.
