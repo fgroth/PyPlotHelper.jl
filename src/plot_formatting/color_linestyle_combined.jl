@@ -1,7 +1,8 @@
 
 """
     get_color_linestyle(i_color::Int64, i_linestyle::Int64;
-                        n_color::Int64=2, n_linestyle::Int64=2)
+                        n_color::Int64=2, n_linestyle::Int64=2,
+                        get_color::Function=get_color, get_linestyle::Function=get_linestyle)
 
 Return Tuple of `color` and `linestyle`.
 
@@ -9,7 +10,8 @@ By default, `color` is chosen based on `i_color` (see [`get_color`](@ref)), and 
 If one `n_color` or `n_linestyle` is 1, however, we use both to indicate the other property as well.
 """
 function get_color_linestyle(i_color::Int64, i_linestyle::Int64;
-                             n_color::Int64=2, n_linestyle::Int64=2)
+                             n_color::Int64=2, n_linestyle::Int64=2,
+                             get_color::Function=get_color, get_linestyle::Function=get_linestyle)
     if n_color > 1
         color = get_color(i_color)
     else
