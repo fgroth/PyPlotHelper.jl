@@ -82,7 +82,7 @@ function get_colormap(quantity::String="rho")
         return "afmhot"
     elseif contains(quantity,"SZ")
         if startswith(quantity,"unsharp-masked") || contains(quantity,"kSZ")
-            return "twilight"
+            return "twilight_shifted"
         else # tSZ
             return "inferno"
         end
