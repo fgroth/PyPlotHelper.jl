@@ -35,7 +35,7 @@ function setup_plot(plot_type::MapsPlot)
     elseif plot_type.external_colorscale == "top"
         0, 0.2*n_rows + get_bottom(height=4*n_rows)*4*n_rows
     elseif plot_type.external_colorscale == "right"
-        (0.2 + get_left(width=4*n_cols)*4), 0
+        (0.2 + 6*get_left(width=4*n_cols)*4), 0
     else
         error("value for external_colorscale not supported (yet).")
     end
@@ -43,7 +43,7 @@ function setup_plot(plot_type::MapsPlot)
     # now create the actual figure and axis
     fig = figure(figsize=(4*n_cols+right_space,4*n_rows+top_space))
     style_plot(fig_width=4*n_cols+right_space,print_columns=plot_type.print_columns)
-    gs = fig.add_gridspec(n_rows,n_cols, hspace=0.01, wspace=0.01, left=0.01,right=0.99-right_space/(4*n_rows+right_space),top=0.99-top_space/(4*n_rows+top_space),bottom=0.01)
+    gs = fig.add_gridspec(n_rows,n_cols, hspace=0.01, wspace=0.01, left=0.01,right=0.99-right_space/(4*n_cols+right_space),top=0.99-top_space/(4*n_rows+top_space),bottom=0.01)
 
     # ensure we can access it at any index
     if isa(plot_type.projection, Nothing)
@@ -130,10 +130,11 @@ function add_colorscale(plot_type::MapsPlot, fig;
         else
             plot_type.n_to_plot[2]
         end
-        right_space = 0.2*n_cols
-        right_space_labels = get_left(width=4*n_cols)*4*n_cols
+        right_space = 0.2
+        right_space_labels = 6*get_left(width=4*n_cols)*4
+        bottom = 0.01
 
-        cb_ax = fig.add_axes([1.0-(right_space+right_space_labels)/(4*n_cols+right_space+right_space_labels), 0.01, right_space/(4*n_cols+right_space)-0.02, 0.98])
+        cb_ax = fig.add_axes([4*n_cols/(4*n_cols+right_space+right_space_labels), bottom, right_space/(4*n_cols+right_space+right_space_labels), 1.0-2*bottom])
         cb = colorbar(matplotlib.cm.ScalarMappable(cmap=cmap, norm=matplotlib.colors.Normalize(vmin=vmin, vmax=vmax)), cb_ax, orientation="vertical")
         cb_ax.yaxis.set_ticks_position("right")
         cb.set_label(label)        
@@ -174,6 +175,25 @@ function create_separate_colorscale(; orientation::String="horizontal",
         cb.ax.set_title(units)
     elseif orientation == "vertical"
         # to implement
+        # todo: just use the external colorscale as orientation, which should be just the n=0 case
+        cb_width = 0.2
+
+        style_plot(print_columns=print_columns, fig_width=1)
+        text_height = get_left(width=1)
+        println(text_height)
+
+        # re-calculate the correct width
+        style_plot(print_columns=print_columns, fig_width=cb_width+text_height)
+        text_height = get_left(width=cb_width+text_height)
+        println(text_height)
+        text_height *= 0.5 + sqrt(0.25+cb_width)
+        println(text_height)
+                
+        fig = figure(figsize=(cb_width+text_height/print_columns, 4))
+        cb_ax = fig.add_axes([0.01, 0.01, (cb_width-0.02)/(cb_width+text_height), 0.98])
+        cb = colorbar(matplotlib.cm.ScalarMappable(cmap=cmap, norm=matplotlib.colors.Normalize(vmin=vmin, vmax=vmax)), cb_ax, orientation="vertical")
+        cb_ax.yaxis.set_ticks_position("right")
+        cb.ax.set_title(units)
     else
         error("orientation has to be either horizontal or vertical")
     end
