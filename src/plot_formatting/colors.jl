@@ -81,7 +81,11 @@ function get_colormap(quantity::String="rho")
     elseif startswith(uppercase(quantity),"X-RAY")
         return "afmhot"
     elseif contains(quantity,"SZ")
-        return "jet"
+        if startswith(quantity,"unsharp-masked") || contains(quantity,"kSZ")
+            return "twilight"
+        else # tSZ
+            return "inferno"
+        end
     elseif lowercase(quantity) in ["b", "bx", "by", "bz", "bfld"]
         # diverging colormap
         return "twilight_shifted"
