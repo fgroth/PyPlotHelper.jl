@@ -1,5 +1,7 @@
 module PyPlotHelper
 
+include(joinpath("init.jl"))
+
 include(joinpath("plot_formatting","colors.jl"))
 export set_color_cycle, reset_color_cycle,
     get_color, get_color_iteration, get_colormap,
