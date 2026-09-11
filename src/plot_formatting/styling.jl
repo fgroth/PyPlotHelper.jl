@@ -42,6 +42,9 @@ function style_plot(; print_columns::Number=1, n_plots_side_by_side::Number=1.0,
 
     # legend
     rc("legend", frameon = false, handletextpad = 0.4)
+
+    # ensure latex works
+    rc("text", usetex=true)
 end
 
 global dark_mode_active=false
