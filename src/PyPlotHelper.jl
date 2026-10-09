@@ -7,7 +7,10 @@ export set_color_cycle, reset_color_cycle,
 include(joinpath("plot_formatting","colors_from_cmap.jl"))
 export get_color_from_colormap
 include(joinpath("plot_formatting","linestyles.jl"))
-export get_linestyle, get_marker,
+export get_linestyle
+include(joinpath("plot_formatting","markers.jl"))
+export set_marker_cycle, reset_marker_cycle,
+    get_marker,
     get_filled_marker, get_fillstyle
 include(joinpath("plot_formatting","color_linestyle_combined.jl"))
 export get_color_linestyle
