@@ -86,7 +86,7 @@ function get_colormap(quantity::String="rho")
         else # tSZ
             return "inferno"
         end
-    elseif lowercase(quantity) in ["b", "bx", "by", "bz", "bfld"]
+    elseif lowercase(quantity) in ["b", "bx", "by", "bz", "bfld", "bfldx", "bfldy", "bfldz"]
         # diverging colormap
         return "twilight_shifted"
     elseif lowercase(quantity) == "pb"
@@ -105,6 +105,9 @@ function get_colormap(quantity::String="rho")
         else
             return "RdBu"
         end
+    elseif lowercase(quantity) == "divb"
+        # diverging colormap
+        return "seismic" # maybe not perfect, as this is not symmetric
     else
         error("quantity="*quantity*" value not allowed")
     end
