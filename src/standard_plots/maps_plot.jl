@@ -29,21 +29,32 @@ function setup_plot(plot_type::MapsPlot)
         plot_type.n_to_plot[2]
     end
 
-    style_plot(fig_width=4*n_cols,print_columns=plot_type.print_columns)
-    right_space, top_space = if isa(plot_type.external_colorscale, Nothing)
-        0, 0
-    elseif plot_type.external_colorscale == "top"
-        0, 0.2*n_rows + get_bottom(height=4*n_rows)*4*n_rows
-    elseif plot_type.external_colorscale == "right"
-        (0.2 + 6*get_left(width=4*n_cols)*4), 0
-    else
-        error("value for external_colorscale not supported (yet).")
+    maps_width = 4*n_cols
+    maps_height = 4*n_rows
+
+    # find the correct width iteratively
+    right_space = [0.]
+    top_space = [0.]
+    for i in 1:3
+        style_plot(fig_width=maps_width+right_space[1],print_columns=plot_type.print_columns)
+        right_space[1], top_space[1] = if isa(plot_type.external_colorscale, Nothing)
+            0, 0
+        elseif plot_type.external_colorscale == "top"
+            cb_height = 0.2
+            0, cb_height + 1.3*get_bottom(height=maps_height+top_space[1])*maps_height
+        elseif plot_type.external_colorscale == "right"
+            cb_width = 0.2
+            (cb_width + 1.5*get_left(width=maps_width+right_space[1],large=true)*maps_width), 0
+        else
+            error("value for external_colorscale not supported (yet).")
+        end
     end
+    right_space = right_space[1]
+    top_space = top_space[1]
 
     # now create the actual figure and axis
-    fig = figure(figsize=(4*n_cols+right_space,4*n_rows+top_space))
-    style_plot(fig_width=4*n_cols+right_space,print_columns=plot_type.print_columns)
-    gs = fig.add_gridspec(n_rows,n_cols, hspace=0.01, wspace=0.01, left=0.01,right=0.99-right_space/(4*n_cols+right_space),top=0.99-top_space/(4*n_rows+top_space),bottom=0.01)
+    fig = figure(figsize=(maps_width+right_space,4*n_rows+top_space))
+    gs = fig.add_gridspec(n_rows,n_cols, hspace=0.01, wspace=0.01, left=0.01,right=0.99-right_space/(maps_width+right_space),top=0.99-top_space/(maps_height+top_space),bottom=0.01)
 
     # ensure we can access it at any index
     if isa(plot_type.projection, Nothing)
@@ -117,10 +128,17 @@ function add_colorscale(plot_type::MapsPlot, fig;
         else
             plot_type.n_to_plot[1]
         end
-        top_space = 0.2*n_rows
-        top_space_labels = get_bottom(height=4*n_rows)*4*n_rows
+        cb_height = 0.2
+        maps_height = 4*n_rows
+        top_space_labels = [0.]
+        for i in 1:5
+            top_space_labels[1] = 1.3*get_bottom(height=maps_height+cb_height+top_space_labels[1])*maps_height
+        end
+        top_space_labels = top_space_labels[1]
 
-        cb_ax = fig.add_axes([0.01, 1.0-(top_space+top_space_labels)/(4*n_rows+top_space+top_space_labels), 0.98, top_space/(4*n_rows+top_space)-0.02])
+        total_height = maps_height+cb_height+top_space_labels
+
+        cb_ax = fig.add_axes([0.01, 1.0-(cb_height+top_space_labels)/total_height, 0.98, cb_height/total_height])
         cb = colorbar(matplotlib.cm.ScalarMappable(cmap=cmap, norm=matplotlib.colors.Normalize(vmin=vmin, vmax=vmax)), cb_ax, orientation="horizontal")
         cb_ax.xaxis.set_ticks_position("top")
         cb.ax.set_title(label)
@@ -130,11 +148,18 @@ function add_colorscale(plot_type::MapsPlot, fig;
         else
             plot_type.n_to_plot[2]
         end
-        right_space = 0.2
-        right_space_labels = 6*get_left(width=4*n_cols)*4
+        cb_width = 0.2
+        maps_width = 4*n_cols
+        right_space_labels = [0.]
+        for i in 1:5
+            right_space_labels[1] = 1.5*get_left(width=maps_width+cb_width+right_space_labels[1],large=true)*maps_width
+        end
+        right_space_labels = right_space_labels[1]
         bottom = 0.01
 
-        cb_ax = fig.add_axes([4*n_cols/(4*n_cols+right_space+right_space_labels), bottom, right_space/(4*n_cols+right_space+right_space_labels), 1.0-2*bottom])
+        total_width = maps_width+cb_width+right_space_labels
+
+        cb_ax = fig.add_axes([maps_width/total_width, bottom, cb_width/total_width, 1.0-2*bottom])
         cb = colorbar(matplotlib.cm.ScalarMappable(cmap=cmap, norm=matplotlib.colors.Normalize(vmin=vmin, vmax=vmax)), cb_ax, orientation="vertical")
         cb_ax.yaxis.set_ticks_position("right")
         cb.set_label(label)        
