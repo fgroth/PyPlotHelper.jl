@@ -125,13 +125,3 @@ function get_left(; width::Number=4, large::Bool=false)
     # use the font size as reference
     return pre_factor / width * matplotlib.rcParams["font.size"]/5
 end
-"""
-    get_left(width::Number=4; large::Bool=false)
-
-Get value for `left` to have enough space for axis labels.
-Use `large=true` to give extra space e.g. for logarithmic axes or larger labels.
-"""
-# function get_left(width::Number=4; large::Bool=false)
-#     # use the font size as reference
-#     return get_left(width=width, large=large)
-# end
