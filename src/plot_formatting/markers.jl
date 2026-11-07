@@ -6,7 +6,7 @@ global default_marker_cycle = ["o", # circle,
                                "x", # x
                                "v", # triangle down
                                "s"] # square
-global marker_cycle = default_marker_cycle
+global marker_cycle = deepcopy(default_marker_cycle)
 
 """
     set_marker_cycle(new_marker_cycle::Vector)
@@ -14,7 +14,7 @@ global marker_cycle = default_marker_cycle
 Adjust the marker cycle variable. Also see [`reset_marker_cycle`](@ref).
 """
 function set_marker_cycle(new_marker_cycle::Vector)
-    global marker_cycle = new_marker_cycle
+    global marker_cycle = deepcopy(new_marker_cycle)
 end
 """
     reset_marker_cycle()
@@ -22,7 +22,7 @@ end
 Reset the marker cycle variable to the default value.
 """
 function reset_marker_cycle()
-    global marker_cycle = default_marker_cycle
+    global marker_cycle = deepcopy(default_marker_cycle)
 end
 """
     get_marker(i::Int64=1)
