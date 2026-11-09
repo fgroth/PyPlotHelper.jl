@@ -38,5 +38,7 @@ export setup_plot, add_legend
 
 include(joinpath("helper_functions","rainbow_text.jl"))
 export rainbow_text
+include(joinpath("helper_functions","fill_between.jl"))
+export fill_between_dm
 
 end # module
