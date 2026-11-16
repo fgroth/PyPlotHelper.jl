@@ -14,6 +14,8 @@ export set_marker_cycle, reset_marker_cycle,
     get_filled_marker, get_fillstyle
 include(joinpath("plot_formatting","color_linestyle_combined.jl"))
 export get_color_linestyle
+include(joinpath("plot_formatting","color_marker_combined.jl"))
+export get_color_marker
 include(joinpath("plot_formatting","styling.jl"))
 export style_plot,
     set_dark_mode,
