@@ -6,7 +6,7 @@
 
 Return Tuple of `color` and `linestyle`.
 
-By default, `color` is chosen based on `i_color` (see [`get_color`](@ref)), and `linestyle` based on `i_linestyle` (see [`get_linestyle`}(@ref)).
+By default, `color` is chosen based on `i_color` (see [`get_color`](@ref)), and `linestyle` based on `i_linestyle` (see [`get_linestyle`](@ref)).
 If one `n_color` or `n_linestyle` is 1, however, we use both to indicate the other property as well.
 """
 function get_color_linestyle(i_color::Int64, i_linestyle::Int64;
